@@ -460,6 +460,17 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
   display:flex;align-items:center;gap:10px;
 }
 .result-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.copy-btn{
+  margin-left:auto;
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);font-size:.72rem;font-weight:600;
+  padding:4px 10px;border-radius:6px;cursor:pointer;
+  display:flex;align-items:center;gap:5px;
+  transition:all .2s var(--ease);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.copy-btn:hover{color:var(--accent);border-color:var(--accent)}
+.copy-btn.copied{color:var(--accent);border-color:var(--accent)}
 .result-body{color:var(--text);line-height:1.85;font-size:.9rem}
 .result-body strong{color:var(--white);font-weight:600}
 .result-body h3{color:var(--accent);margin:16px 0 6px;font-size:.95rem;font-weight:600}
@@ -846,7 +857,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
     </div>
     <div id="sg-err" class="errbox"></div>
     <div id="sg-res" class="result">
-      <div class="result-label">Resultado</div>
+      <div class="result-label">Resultado <button class="copy-btn" onclick="copyResult('sg-body',this)">&#x2398; Copiar</button></div>
       <div id="sg-body" class="result-body"></div>
     </div>
   </div>
@@ -874,7 +885,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
     </div>
     <div id="rm-err" class="errbox"></div>
     <div id="rm-res" class="result">
-      <div class="result-label">Roteiro gerado</div>
+      <div class="result-label">Roteiro gerado <button class="copy-btn" onclick="copyResult('rm-body',this)">&#x2398; Copiar</button></div>
       <div id="rm-body" class="result-body"></div>
     </div>
   </div>
@@ -1054,6 +1065,17 @@ function switchTab(name) {
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab))
 })
+
+/* ── Copy result ── */
+function copyResult(bodyId, btn) {
+  const el = document.getElementById(bodyId)
+  const text = el.innerText || el.textContent
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '&#x2714; Copiado!'
+    btn.classList.add('copied')
+    setTimeout(() => { btn.innerHTML = '&#x2398; Copiar'; btn.classList.remove('copied') }, 2000)
+  })
+}
 
 /* ── Selectors ── */
 function getM() { return 'llama-3.3-70b-versatile' }
