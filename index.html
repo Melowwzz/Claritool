@@ -1183,27 +1183,51 @@ function setBtn(id, loading, label) {
 function setStatus(model) {
   const sb = document.getElementById('sb-model')
   if (!model) { sb.textContent = ''; return }
-  const names = {
-    'deepseek/deepseek-r1-0528:free': 'DeepSeek R1',
-    'qwen/qwen3-next-80b-a3b-instruct:free': 'Qwen3 80B',
-    'google/gemma-3-27b-it:free': 'Gemma 27B',
-    'meta-llama/llama-3.3-70b-instruct:free': 'Llama 70B',
-    'mistralai/mistral-small-3.1-24b-instruct:free': 'Mistral 24B',
-    'google/gemma-3-12b-it:free': 'Gemma 12B',
-    'google/gemma-3-4b-it:free': 'Gemma 4B',
-    'qwen/qwen3-4b:free': 'Qwen3 4B',
-    'nousresearch/hermes-3-llama-3.1-405b:free': 'Hermes 405B',
-  }
-  sb.textContent = names[model] || model.split('/').pop().split(':')[0]
+  sb.textContent = MODEL_NAMES[model] || model.split('/').pop().split(':')[0]
 }
 
 /* ── API URL — Aponte para seu Cloudflare Worker ── */
 const API_URL = 'https://claritool-worker.bpmasutti.workers.dev'
 
-/* ── API call with auto-retry ── */
-async function callAI(model, messages, _attempt = 1) {
-  const MAX_RETRIES = 3
-  
+/* ── Fallback models por categoria ── */
+const FALLBACK_MODELS = [
+  'google/gemma-3-27b-it:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'mistralai/mistral-small-3.1-24b-instruct:free',
+  'google/gemma-3-12b-it:free',
+  'qwen/qwen3-4b:free',
+  'google/gemma-3-4b-it:free',
+]
+
+/* ── Throttle: evita rajadas de requests ── */
+let _lastCallTime = 0
+const MIN_CALL_INTERVAL = 2000
+
+/* ── Nomes amigáveis dos modelos ── */
+const MODEL_NAMES = {
+  'deepseek/deepseek-r1-0528:free': 'DeepSeek R1',
+  'qwen/qwen3-next-80b-a3b-instruct:free': 'Qwen3 80B',
+  'google/gemma-3-27b-it:free': 'Gemma 27B',
+  'meta-llama/llama-3.3-70b-instruct:free': 'Llama 70B',
+  'mistralai/mistral-small-3.1-24b-instruct:free': 'Mistral 24B',
+  'google/gemma-3-12b-it:free': 'Gemma 12B',
+  'google/gemma-3-4b-it:free': 'Gemma 4B',
+  'qwen/qwen3-4b:free': 'Qwen3 4B',
+  'nousresearch/hermes-3-llama-3.1-405b:free': 'Hermes 405B',
+}
+
+/* ── API call with auto-retry + model fallback ── */
+async function callAI(model, messages, _attempt = 1, _triedModels = []) {
+  const MAX_RETRIES = 5
+
+  // Throttle: espera intervalo mínimo entre chamadas
+  const now = Date.now()
+  const elapsed = now - _lastCallTime
+  if (elapsed < MIN_CALL_INTERVAL) {
+    await new Promise(ok => setTimeout(ok, MIN_CALL_INTERVAL - elapsed))
+  }
+  _lastCallTime = Date.now()
+
   let r, d
   try {
     r = await fetch(API_URL, {
@@ -1214,33 +1238,37 @@ async function callAI(model, messages, _attempt = 1) {
     d = await r.json()
   } catch (networkErr) {
     if (_attempt < MAX_RETRIES) {
-      const delay = _attempt * 5000
-      toast(`Erro de conexão. Tentando de novo em ${delay/1000}s...`)
+      const delay = Math.min(_attempt * 3000, 15000)
+      toast(`Erro de conexão. Tentando em ${Math.round(delay/1000)}s...`)
       await new Promise(ok => setTimeout(ok, delay))
-      return callAI(model, messages, _attempt + 1)
+      return callAI(model, messages, _attempt + 1, _triedModels)
     }
     throw new Error('Falha na conexão com o servidor. Verifique sua internet.')
   }
-  
-  // Auto-retry 429 com delay crescente
-  if (r.status === 429 && _attempt < MAX_RETRIES) {
-    const delay = _attempt * 8000 // 8s, 16s, 24s
-    toast(`Modelos ocupados. Tentando de novo em ${delay/1000}s...`)
-    await new Promise(ok => setTimeout(ok, delay))
-    return callAI(model, messages, _attempt + 1)
+
+  // 429: tenta modelo alternativo antes de esperar
+  if (r.status === 429) {
+    _triedModels.push(model)
+    // Busca próximo modelo que ainda não foi tentado
+    const nextModel = FALLBACK_MODELS.find(m => !_triedModels.includes(m))
+    if (nextModel) {
+      toast(`${MODEL_NAMES[model] || model} ocupado. Tentando ${MODEL_NAMES[nextModel] || nextModel}...`)
+      await new Promise(ok => setTimeout(ok, 1500))
+      return callAI(nextModel, messages, 1, _triedModels)
+    }
+    // Todos os modelos tentados — espera e recomeça
+    if (_attempt < MAX_RETRIES) {
+      const delay = Math.min(Math.pow(2, _attempt) * 3000, 30000)
+      toast(`Todos os modelos ocupados. Aguardando ${Math.round(delay/1000)}s...`)
+      await new Promise(ok => setTimeout(ok, delay))
+      return callAI(FALLBACK_MODELS[0], messages, _attempt + 1, [])
+    }
+    throw new Error('Modelos ocupados no momento. Tente novamente em alguns minutos.')
   }
-  
+
   if (!r.ok) throw new Error(d.error || 'Erro na API (' + r.status + ')')
   if (d.usedModel && d.usedModel !== model) {
-    const names = {
-      'deepseek/deepseek-r1-0528:free': 'DeepSeek R1',
-      'qwen/qwen3-next-80b-a3b-instruct:free': 'Qwen3 80B',
-      'google/gemma-3-27b-it:free': 'Gemma 27B',
-      'meta-llama/llama-3.3-70b-instruct:free': 'Llama 70B',
-      'mistralai/mistral-small-3.1-24b-instruct:free': 'Mistral 24B',
-      'google/gemma-3-12b-it:free': 'Gemma 12B',
-    }
-    toast('Modelo alternativo: ' + (names[d.usedModel] || d.usedModel))
+    toast('Modelo alternativo: ' + (MODEL_NAMES[d.usedModel] || d.usedModel))
   }
   setStatus(d.usedModel || model)
   return d.result
