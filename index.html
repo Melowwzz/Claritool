@@ -842,31 +842,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
           oninput="document.getElementById('sg-char').textContent=this.value.length"></textarea>
         <div class="char-count"><span id="sg-char">0</span> / 15.000</div>
       </div>
-      <div class="field">
-        <label class="label">Modelo</label>
-        <div class="model-grid" id="sg-mg">
-          <div class="model-card sel" data-m="llama-3.3-70b-versatile" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Llama 3.3 70B</div>
-            <div class="model-desc">Melhor qualidade, equilibrio perfeito</div>
-            <span class="model-tag">Recomendado</span>
-          </div>
-          <div class="model-card" data-m="mixtral-8x7b-32768" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Mixtral 8x7B</div>
-            <div class="model-desc">Excelente para textos longos</div>
-            <span class="model-tag">Textos longos</span>
-          </div>
-          <div class="model-card" data-m="gemma2-9b-it" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Gemma 2 9B</div>
-            <div class="model-desc">Rapido e preciso para textos curtos</div>
-            <span class="model-tag">Rapido</span>
-          </div>
-          <div class="model-card" data-m="llama-3.1-8b-instant" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Llama 8B Instant</div>
-            <div class="model-desc">Ultra rapido para textos simples</div>
-            <span class="model-tag">Ultra rapido</span>
-          </div>
-        </div>
-      </div>
       <button class="btn btn-primary" id="sg-btn" onclick="runSimplify()" style="width:100%">Simplificar texto</button>
     </div>
     <div id="sg-err" class="errbox"></div>
@@ -894,31 +869,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <div class="field">
         <label class="label">Contexto adicional <span class="label-hint">(opcional)</span></label>
         <textarea id="rm-ctx" rows="2" placeholder="Ex: Estudo 1h por dia, ja sei Excel basico..."></textarea>
-      </div>
-      <div class="field">
-        <label class="label">Modelo</label>
-        <div class="model-grid" id="rm-mg">
-          <div class="model-card sel" data-m="llama-3.3-70b-versatile" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Llama 3.3 70B</div>
-            <div class="model-desc">Raciocinio profundo, planos detalhados e estruturados</div>
-            <span class="model-tag">Recomendado</span>
-          </div>
-          <div class="model-card" data-m="mixtral-8x7b-32768" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Mixtral 8x7B</div>
-            <div class="model-desc">Contexto enorme para roteiros muito completos</div>
-            <span class="model-tag">Contexto longo</span>
-          </div>
-          <div class="model-card" data-m="gemma2-9b-it" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Gemma 2 9B</div>
-            <div class="model-desc">Bom equilibrio para roteiros completos</div>
-            <span class="model-tag">Equilibrado</span>
-          </div>
-          <div class="model-card" data-m="llama-3.1-8b-instant" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Llama 8B Instant</div>
-            <div class="model-desc">Mais rapido para roteiros simples</div>
-            <span class="model-tag">Rapido</span>
-          </div>
-        </div>
       </div>
       <button class="btn btn-primary" id="rm-btn" onclick="runRoadmap()" style="width:100%">Gerar roteiro</button>
     </div>
@@ -989,32 +939,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
             <div class="mode-card" data-qt="objetiva" onclick="pickQt(this)">
               <div class="mode-name">So objetiva</div>
               <div class="mode-desc">Multipla escolha com correcao imediata</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Modelo</label>
-          <div class="model-grid" id="t-mg">
-            <div class="model-card sel" data-m="llama-3.3-70b-versatile" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Llama 3.3 70B</div>
-              <div class="model-desc">Melhor para tutoria — explicacoes claras e detalhadas</div>
-              <span class="model-tag">Recomendado</span>
-            </div>
-            <div class="model-card" data-m="mixtral-8x7b-32768" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Mixtral 8x7B</div>
-              <div class="model-desc">Excelente para sessoes longas de estudo</div>
-              <span class="model-tag">Sessoes longas</span>
-            </div>
-            <div class="model-card" data-m="gemma2-9b-it" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Gemma 2 9B</div>
-              <div class="model-desc">Rapido e segue instrucoes com precisao</div>
-              <span class="model-tag">Agil</span>
-            </div>
-            <div class="model-card" data-m="llama-3.1-8b-instant" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Llama 8B Instant</div>
-              <div class="model-desc">Ultra rapido para revisoes rapidas</div>
-              <span class="model-tag">Ultra rapido</span>
             </div>
           </div>
         </div>
@@ -1132,14 +1056,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 })
 
 /* ── Selectors ── */
-function pickM(card, gId) {
-  document.querySelectorAll('#'+gId+' .model-card').forEach(c => c.classList.remove('sel'))
-  card.classList.add('sel')
-}
-function getM(gId) {
-  const s = document.querySelector('#'+gId+' .model-card.sel')
-  return s ? s.dataset.m : 'google/gemma-3-27b-it:free'
-}
+function getM() { return 'llama-3.3-70b-versatile' }
 function pickL(c) { document.querySelectorAll('#lg .level-card').forEach(x => x.classList.remove('sel')); c.classList.add('sel') }
 function pickMo(c) { document.querySelectorAll('#mog .mode-card').forEach(x => x.classList.remove('sel')); c.classList.add('sel') }
 function pickQt(c) { document.querySelectorAll('#qtg .mode-card').forEach(x => x.classList.remove('sel')); c.classList.add('sel') }
@@ -1281,7 +1198,7 @@ async function runSimplify() {
   setBtn('sg-btn', true, 'Processando...')
   document.getElementById('sg-res').classList.remove('vis')
   try {
-    const r = await callAI(getM('sg-mg'), [{
+    const r = await callAI(getM(), [{
       role: 'user',
       content: `Voce e especialista em comunicacao clara. Simplifique o texto abaixo para que qualquer pessoa entenda, sem conhecimento tecnico. Use frases curtas, substitua termos dificeis por equivalentes simples, e destaque os pontos principais ao final com um breve resumo.\n\nTexto:\n${text}\n\nResponda em portugues brasileiro.`
     }])
@@ -1307,7 +1224,7 @@ async function runRoadmap() {
   setBtn('rm-btn', true, 'Gerando...')
   document.getElementById('rm-res').classList.remove('vis')
   try {
-    const r = await callAI(getM('rm-mg'), [{
+    const r = await callAI(getM(), [{
       role: 'user',
       content: `Voce e pedagogo especialista em aprendizagem acelerada. Crie um roteiro de estudos detalhado, realista e motivador.\n\nObjetivo: ${goal}\nPrazo: ${time}${ctx ? '\nContexto: ' + ctx : ''}\n\nEstruture com fases claras, inclua recursos gratuitos (YouTube, sites, livros), e adicione dicas praticas. Responda em portugues brasileiro.`
     }])
@@ -1419,7 +1336,7 @@ async function startTutor() {
   }
   T = {
     messages: [],
-    model:   getM('t-mg'),
+    model:   getM(),
     subject: subj,
     level:   (document.querySelector('#lg .level-card.sel') || {}).dataset?.l || 'Intermediario',
     mode:    (document.querySelector('#mog .mode-card.sel') || {}).dataset?.mo || 'explicacao',
