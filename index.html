@@ -845,24 +845,24 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <div class="field">
         <label class="label">Modelo</label>
         <div class="model-grid" id="sg-mg">
-          <div class="model-card sel" data-m="google/gemma-3-27b-it:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Gemma 3 27B</div>
-            <div class="model-desc">Equilibrio entre velocidade e qualidade</div>
+          <div class="model-card sel" data-m="llama-3.3-70b-versatile" onclick="pickM(this,'sg-mg')">
+            <div class="model-name">Llama 3.3 70B</div>
+            <div class="model-desc">Melhor qualidade, equilibrio perfeito</div>
             <span class="model-tag">Recomendado</span>
           </div>
-          <div class="model-card" data-m="mistralai/mistral-small-3.1-24b-instruct:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Mistral Small 24B</div>
-            <div class="model-desc">Agil e preciso para textos curtos</div>
+          <div class="model-card" data-m="mixtral-8x7b-32768" onclick="pickM(this,'sg-mg')">
+            <div class="model-name">Mixtral 8x7B</div>
+            <div class="model-desc">Excelente para textos longos</div>
+            <span class="model-tag">Textos longos</span>
+          </div>
+          <div class="model-card" data-m="gemma2-9b-it" onclick="pickM(this,'sg-mg')">
+            <div class="model-name">Gemma 2 9B</div>
+            <div class="model-desc">Rapido e preciso para textos curtos</div>
             <span class="model-tag">Rapido</span>
           </div>
-          <div class="model-card" data-m="meta-llama/llama-3.3-70b-instruct:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Llama 3.3 70B</div>
-            <div class="model-desc">Versatil, bom para textos longos e tecnicos</div>
-            <span class="model-tag">Versatil</span>
-          </div>
-          <div class="model-card" data-m="google/gemma-3-12b-it:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Gemma 3 12B</div>
-            <div class="model-desc">O mais rapido, para textos simples</div>
+          <div class="model-card" data-m="llama-3.1-8b-instant" onclick="pickM(this,'sg-mg')">
+            <div class="model-name">Llama 8B Instant</div>
+            <div class="model-desc">Ultra rapido para textos simples</div>
             <span class="model-tag">Ultra rapido</span>
           </div>
         </div>
@@ -898,25 +898,25 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <div class="field">
         <label class="label">Modelo</label>
         <div class="model-grid" id="rm-mg">
-          <div class="model-card sel" data-m="deepseek/deepseek-r1-0528:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">DeepSeek R1</div>
-            <div class="model-desc">Raciocinio profundo, cria planos mais detalhados e estruturados</div>
-            <span class="model-tag">Mais inteligente</span>
+          <div class="model-card sel" data-m="llama-3.3-70b-versatile" onclick="pickM(this,'rm-mg')">
+            <div class="model-name">Llama 3.3 70B</div>
+            <div class="model-desc">Raciocinio profundo, planos detalhados e estruturados</div>
+            <span class="model-tag">Recomendado</span>
           </div>
-          <div class="model-card" data-m="qwen/qwen3-next-80b-a3b-instruct:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Qwen3 80B</div>
-            <div class="model-desc">Modelo poderoso com contexto enorme</div>
-            <span class="model-tag">Avancado</span>
+          <div class="model-card" data-m="mixtral-8x7b-32768" onclick="pickM(this,'rm-mg')">
+            <div class="model-name">Mixtral 8x7B</div>
+            <div class="model-desc">Contexto enorme para roteiros muito completos</div>
+            <span class="model-tag">Contexto longo</span>
           </div>
-          <div class="model-card" data-m="google/gemma-3-27b-it:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Gemma 3 27B</div>
+          <div class="model-card" data-m="gemma2-9b-it" onclick="pickM(this,'rm-mg')">
+            <div class="model-name">Gemma 2 9B</div>
             <div class="model-desc">Bom equilibrio para roteiros completos</div>
             <span class="model-tag">Equilibrado</span>
           </div>
-          <div class="model-card" data-m="meta-llama/llama-3.3-70b-instruct:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Llama 3.3 70B</div>
-            <div class="model-desc">Versatil e confiavel</div>
-            <span class="model-tag">Versatil</span>
+          <div class="model-card" data-m="llama-3.1-8b-instant" onclick="pickM(this,'rm-mg')">
+            <div class="model-name">Llama 8B Instant</div>
+            <div class="model-desc">Mais rapido para roteiros simples</div>
+            <span class="model-tag">Rapido</span>
           </div>
         </div>
       </div>
@@ -996,23 +996,23 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
         <div class="field">
           <label class="label">Modelo</label>
           <div class="model-grid" id="t-mg">
-            <div class="model-card sel" data-m="google/gemma-3-27b-it:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Gemma 3 27B</div>
-              <div class="model-desc">Melhor para tutoria — equilibra velocidade e qualidade</div>
+            <div class="model-card sel" data-m="llama-3.3-70b-versatile" onclick="pickM(this,'t-mg')">
+              <div class="model-name">Llama 3.3 70B</div>
+              <div class="model-desc">Melhor para tutoria — explicacoes claras e detalhadas</div>
               <span class="model-tag">Recomendado</span>
             </div>
-            <div class="model-card" data-m="meta-llama/llama-3.3-70b-instruct:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Llama 3.3 70B</div>
-              <div class="model-desc">Excelente para explicacoes detalhadas</div>
-              <span class="model-tag">Detalhado</span>
+            <div class="model-card" data-m="mixtral-8x7b-32768" onclick="pickM(this,'t-mg')">
+              <div class="model-name">Mixtral 8x7B</div>
+              <div class="model-desc">Excelente para sessoes longas de estudo</div>
+              <span class="model-tag">Sessoes longas</span>
             </div>
-            <div class="model-card" data-m="mistralai/mistral-small-3.1-24b-instruct:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Mistral Small 24B</div>
+            <div class="model-card" data-m="gemma2-9b-it" onclick="pickM(this,'t-mg')">
+              <div class="model-name">Gemma 2 9B</div>
               <div class="model-desc">Rapido e segue instrucoes com precisao</div>
               <span class="model-tag">Agil</span>
             </div>
-            <div class="model-card" data-m="google/gemma-3-12b-it:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Gemma 3 12B</div>
+            <div class="model-card" data-m="llama-3.1-8b-instant" onclick="pickM(this,'t-mg')">
+              <div class="model-name">Llama 8B Instant</div>
               <div class="model-desc">Ultra rapido para revisoes rapidas</div>
               <span class="model-tag">Ultra rapido</span>
             </div>
@@ -1189,31 +1189,26 @@ function setStatus(model) {
 /* ── API URL — Aponte para seu Cloudflare Worker ── */
 const API_URL = 'https://claritool-worker.bpmasutti.workers.dev'
 
-/* ── Fallback models por categoria ── */
+/* ── Fallback models (Groq) ── */
 const FALLBACK_MODELS = [
-  'google/gemma-3-27b-it:free',
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'mistralai/mistral-small-3.1-24b-instruct:free',
-  'google/gemma-3-12b-it:free',
-  'qwen/qwen3-4b:free',
-  'google/gemma-3-4b-it:free',
+  'llama-3.3-70b-versatile',
+  'llama-3.1-70b-versatile',
+  'mixtral-8x7b-32768',
+  'gemma2-9b-it',
+  'llama-3.1-8b-instant',
 ]
 
 /* ── Throttle: evita rajadas de requests ── */
 let _lastCallTime = 0
-const MIN_CALL_INTERVAL = 2000
+const MIN_CALL_INTERVAL = 1000
 
 /* ── Nomes amigáveis dos modelos ── */
 const MODEL_NAMES = {
-  'deepseek/deepseek-r1-0528:free': 'DeepSeek R1',
-  'qwen/qwen3-next-80b-a3b-instruct:free': 'Qwen3 80B',
-  'google/gemma-3-27b-it:free': 'Gemma 27B',
-  'meta-llama/llama-3.3-70b-instruct:free': 'Llama 70B',
-  'mistralai/mistral-small-3.1-24b-instruct:free': 'Mistral 24B',
-  'google/gemma-3-12b-it:free': 'Gemma 12B',
-  'google/gemma-3-4b-it:free': 'Gemma 4B',
-  'qwen/qwen3-4b:free': 'Qwen3 4B',
-  'nousresearch/hermes-3-llama-3.1-405b:free': 'Hermes 405B',
+  'llama-3.3-70b-versatile': 'Llama 3.3 70B',
+  'llama-3.1-70b-versatile': 'Llama 3.1 70B',
+  'mixtral-8x7b-32768': 'Mixtral 8x7B',
+  'gemma2-9b-it': 'Gemma 2 9B',
+  'llama-3.1-8b-instant': 'Llama 8B',
 }
 
 /* ── API call with auto-retry + model fallback ── */
