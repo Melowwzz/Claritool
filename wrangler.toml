@@ -1,0 +1,6 @@
+name = "claritool-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# A chave GROQ_API_KEY deve ser adicionada como secret via:
+# npx wrangler secret put GROQ_API_KEY

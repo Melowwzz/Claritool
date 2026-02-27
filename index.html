@@ -842,31 +842,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
           oninput="document.getElementById('sg-char').textContent=this.value.length"></textarea>
         <div class="char-count"><span id="sg-char">0</span> / 15.000</div>
       </div>
-      <div class="field">
-        <label class="label">Modelo</label>
-        <div class="model-grid" id="sg-mg">
-          <div class="model-card sel" data-m="google/gemma-3-27b-it:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Gemma 3 27B</div>
-            <div class="model-desc">Equilibrio entre velocidade e qualidade</div>
-            <span class="model-tag">Recomendado</span>
-          </div>
-          <div class="model-card" data-m="mistralai/mistral-small-3.1-24b-instruct:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Mistral Small 24B</div>
-            <div class="model-desc">Agil e preciso para textos curtos</div>
-            <span class="model-tag">Rapido</span>
-          </div>
-          <div class="model-card" data-m="meta-llama/llama-3.3-70b-instruct:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Llama 3.3 70B</div>
-            <div class="model-desc">Versatil, bom para textos longos e tecnicos</div>
-            <span class="model-tag">Versatil</span>
-          </div>
-          <div class="model-card" data-m="google/gemma-3-12b-it:free" onclick="pickM(this,'sg-mg')">
-            <div class="model-name">Gemma 3 12B</div>
-            <div class="model-desc">O mais rapido, para textos simples</div>
-            <span class="model-tag">Ultra rapido</span>
-          </div>
-        </div>
-      </div>
       <button class="btn btn-primary" id="sg-btn" onclick="runSimplify()" style="width:100%">Simplificar texto</button>
     </div>
     <div id="sg-err" class="errbox"></div>
@@ -894,31 +869,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <div class="field">
         <label class="label">Contexto adicional <span class="label-hint">(opcional)</span></label>
         <textarea id="rm-ctx" rows="2" placeholder="Ex: Estudo 1h por dia, ja sei Excel basico..."></textarea>
-      </div>
-      <div class="field">
-        <label class="label">Modelo</label>
-        <div class="model-grid" id="rm-mg">
-          <div class="model-card sel" data-m="deepseek/deepseek-r1-0528:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">DeepSeek R1</div>
-            <div class="model-desc">Raciocinio profundo, cria planos mais detalhados e estruturados</div>
-            <span class="model-tag">Mais inteligente</span>
-          </div>
-          <div class="model-card" data-m="qwen/qwen3-next-80b-a3b-instruct:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Qwen3 80B</div>
-            <div class="model-desc">Modelo poderoso com contexto enorme</div>
-            <span class="model-tag">Avancado</span>
-          </div>
-          <div class="model-card" data-m="google/gemma-3-27b-it:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Gemma 3 27B</div>
-            <div class="model-desc">Bom equilibrio para roteiros completos</div>
-            <span class="model-tag">Equilibrado</span>
-          </div>
-          <div class="model-card" data-m="meta-llama/llama-3.3-70b-instruct:free" onclick="pickM(this,'rm-mg')">
-            <div class="model-name">Llama 3.3 70B</div>
-            <div class="model-desc">Versatil e confiavel</div>
-            <span class="model-tag">Versatil</span>
-          </div>
-        </div>
       </div>
       <button class="btn btn-primary" id="rm-btn" onclick="runRoadmap()" style="width:100%">Gerar roteiro</button>
     </div>
@@ -989,32 +939,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
             <div class="mode-card" data-qt="objetiva" onclick="pickQt(this)">
               <div class="mode-name">So objetiva</div>
               <div class="mode-desc">Multipla escolha com correcao imediata</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Modelo</label>
-          <div class="model-grid" id="t-mg">
-            <div class="model-card sel" data-m="google/gemma-3-27b-it:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Gemma 3 27B</div>
-              <div class="model-desc">Melhor para tutoria — equilibra velocidade e qualidade</div>
-              <span class="model-tag">Recomendado</span>
-            </div>
-            <div class="model-card" data-m="meta-llama/llama-3.3-70b-instruct:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Llama 3.3 70B</div>
-              <div class="model-desc">Excelente para explicacoes detalhadas</div>
-              <span class="model-tag">Detalhado</span>
-            </div>
-            <div class="model-card" data-m="mistralai/mistral-small-3.1-24b-instruct:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Mistral Small 24B</div>
-              <div class="model-desc">Rapido e segue instrucoes com precisao</div>
-              <span class="model-tag">Agil</span>
-            </div>
-            <div class="model-card" data-m="google/gemma-3-12b-it:free" onclick="pickM(this,'t-mg')">
-              <div class="model-name">Gemma 3 12B</div>
-              <div class="model-desc">Ultra rapido para revisoes rapidas</div>
-              <span class="model-tag">Ultra rapido</span>
             </div>
           </div>
         </div>
@@ -1132,14 +1056,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 })
 
 /* ── Selectors ── */
-function pickM(card, gId) {
-  document.querySelectorAll('#'+gId+' .model-card').forEach(c => c.classList.remove('sel'))
-  card.classList.add('sel')
-}
-function getM(gId) {
-  const s = document.querySelector('#'+gId+' .model-card.sel')
-  return s ? s.dataset.m : 'google/gemma-3-27b-it:free'
-}
+function getM() { return 'llama-3.3-70b-versatile' }
 function pickL(c) { document.querySelectorAll('#lg .level-card').forEach(x => x.classList.remove('sel')); c.classList.add('sel') }
 function pickMo(c) { document.querySelectorAll('#mog .mode-card').forEach(x => x.classList.remove('sel')); c.classList.add('sel') }
 function pickQt(c) { document.querySelectorAll('#qtg .mode-card').forEach(x => x.classList.remove('sel')); c.classList.add('sel') }
@@ -1183,27 +1100,46 @@ function setBtn(id, loading, label) {
 function setStatus(model) {
   const sb = document.getElementById('sb-model')
   if (!model) { sb.textContent = ''; return }
-  const names = {
-    'deepseek/deepseek-r1-0528:free': 'DeepSeek R1',
-    'qwen/qwen3-next-80b-a3b-instruct:free': 'Qwen3 80B',
-    'google/gemma-3-27b-it:free': 'Gemma 27B',
-    'meta-llama/llama-3.3-70b-instruct:free': 'Llama 70B',
-    'mistralai/mistral-small-3.1-24b-instruct:free': 'Mistral 24B',
-    'google/gemma-3-12b-it:free': 'Gemma 12B',
-    'google/gemma-3-4b-it:free': 'Gemma 4B',
-    'qwen/qwen3-4b:free': 'Qwen3 4B',
-    'nousresearch/hermes-3-llama-3.1-405b:free': 'Hermes 405B',
-  }
-  sb.textContent = names[model] || model.split('/').pop().split(':')[0]
+  sb.textContent = MODEL_NAMES[model] || model.split('/').pop().split(':')[0]
 }
 
 /* ── API URL — Aponte para seu Cloudflare Worker ── */
 const API_URL = 'https://claritool-worker.bpmasutti.workers.dev'
 
-/* ── API call with auto-retry ── */
-async function callAI(model, messages, _attempt = 1) {
-  const MAX_RETRIES = 3
-  
+/* ── Fallback models (Groq) ── */
+const FALLBACK_MODELS = [
+  'llama-3.3-70b-versatile',
+  'llama-3.1-70b-versatile',
+  'mixtral-8x7b-32768',
+  'gemma2-9b-it',
+  'llama-3.1-8b-instant',
+]
+
+/* ── Throttle: evita rajadas de requests ── */
+let _lastCallTime = 0
+const MIN_CALL_INTERVAL = 1000
+
+/* ── Nomes amigáveis dos modelos ── */
+const MODEL_NAMES = {
+  'llama-3.3-70b-versatile': 'Llama 3.3 70B',
+  'llama-3.1-70b-versatile': 'Llama 3.1 70B',
+  'mixtral-8x7b-32768': 'Mixtral 8x7B',
+  'gemma2-9b-it': 'Gemma 2 9B',
+  'llama-3.1-8b-instant': 'Llama 8B',
+}
+
+/* ── API call with auto-retry + model fallback ── */
+async function callAI(model, messages, _attempt = 1, _triedModels = []) {
+  const MAX_RETRIES = 5
+
+  // Throttle: espera intervalo mínimo entre chamadas
+  const now = Date.now()
+  const elapsed = now - _lastCallTime
+  if (elapsed < MIN_CALL_INTERVAL) {
+    await new Promise(ok => setTimeout(ok, MIN_CALL_INTERVAL - elapsed))
+  }
+  _lastCallTime = Date.now()
+
   let r, d
   try {
     r = await fetch(API_URL, {
@@ -1214,33 +1150,37 @@ async function callAI(model, messages, _attempt = 1) {
     d = await r.json()
   } catch (networkErr) {
     if (_attempt < MAX_RETRIES) {
-      const delay = _attempt * 5000
-      toast(`Erro de conexão. Tentando de novo em ${delay/1000}s...`)
+      const delay = Math.min(_attempt * 3000, 15000)
+      toast(`Erro de conexão. Tentando em ${Math.round(delay/1000)}s...`)
       await new Promise(ok => setTimeout(ok, delay))
-      return callAI(model, messages, _attempt + 1)
+      return callAI(model, messages, _attempt + 1, _triedModels)
     }
     throw new Error('Falha na conexão com o servidor. Verifique sua internet.')
   }
-  
-  // Auto-retry 429 com delay crescente
-  if (r.status === 429 && _attempt < MAX_RETRIES) {
-    const delay = _attempt * 8000 // 8s, 16s, 24s
-    toast(`Modelos ocupados. Tentando de novo em ${delay/1000}s...`)
-    await new Promise(ok => setTimeout(ok, delay))
-    return callAI(model, messages, _attempt + 1)
+
+  // 429: tenta modelo alternativo antes de esperar
+  if (r.status === 429) {
+    _triedModels.push(model)
+    // Busca próximo modelo que ainda não foi tentado
+    const nextModel = FALLBACK_MODELS.find(m => !_triedModels.includes(m))
+    if (nextModel) {
+      toast(`${MODEL_NAMES[model] || model} ocupado. Tentando ${MODEL_NAMES[nextModel] || nextModel}...`)
+      await new Promise(ok => setTimeout(ok, 1500))
+      return callAI(nextModel, messages, 1, _triedModels)
+    }
+    // Todos os modelos tentados — espera e recomeça
+    if (_attempt < MAX_RETRIES) {
+      const delay = Math.min(Math.pow(2, _attempt) * 3000, 30000)
+      toast(`Todos os modelos ocupados. Aguardando ${Math.round(delay/1000)}s...`)
+      await new Promise(ok => setTimeout(ok, delay))
+      return callAI(FALLBACK_MODELS[0], messages, _attempt + 1, [])
+    }
+    throw new Error('Modelos ocupados no momento. Tente novamente em alguns minutos.')
   }
-  
+
   if (!r.ok) throw new Error(d.error || 'Erro na API (' + r.status + ')')
   if (d.usedModel && d.usedModel !== model) {
-    const names = {
-      'deepseek/deepseek-r1-0528:free': 'DeepSeek R1',
-      'qwen/qwen3-next-80b-a3b-instruct:free': 'Qwen3 80B',
-      'google/gemma-3-27b-it:free': 'Gemma 27B',
-      'meta-llama/llama-3.3-70b-instruct:free': 'Llama 70B',
-      'mistralai/mistral-small-3.1-24b-instruct:free': 'Mistral 24B',
-      'google/gemma-3-12b-it:free': 'Gemma 12B',
-    }
-    toast('Modelo alternativo: ' + (names[d.usedModel] || d.usedModel))
+    toast('Modelo alternativo: ' + (MODEL_NAMES[d.usedModel] || d.usedModel))
   }
   setStatus(d.usedModel || model)
   return d.result
@@ -1258,7 +1198,7 @@ async function runSimplify() {
   setBtn('sg-btn', true, 'Processando...')
   document.getElementById('sg-res').classList.remove('vis')
   try {
-    const r = await callAI(getM('sg-mg'), [{
+    const r = await callAI(getM(), [{
       role: 'user',
       content: `Voce e especialista em comunicacao clara. Simplifique o texto abaixo para que qualquer pessoa entenda, sem conhecimento tecnico. Use frases curtas, substitua termos dificeis por equivalentes simples, e destaque os pontos principais ao final com um breve resumo.\n\nTexto:\n${text}\n\nResponda em portugues brasileiro.`
     }])
@@ -1284,7 +1224,7 @@ async function runRoadmap() {
   setBtn('rm-btn', true, 'Gerando...')
   document.getElementById('rm-res').classList.remove('vis')
   try {
-    const r = await callAI(getM('rm-mg'), [{
+    const r = await callAI(getM(), [{
       role: 'user',
       content: `Voce e pedagogo especialista em aprendizagem acelerada. Crie um roteiro de estudos detalhado, realista e motivador.\n\nObjetivo: ${goal}\nPrazo: ${time}${ctx ? '\nContexto: ' + ctx : ''}\n\nEstruture com fases claras, inclua recursos gratuitos (YouTube, sites, livros), e adicione dicas praticas. Responda em portugues brasileiro.`
     }])
@@ -1396,7 +1336,7 @@ async function startTutor() {
   }
   T = {
     messages: [],
-    model:   getM('t-mg'),
+    model:   getM(),
     subject: subj,
     level:   (document.querySelector('#lg .level-card.sel') || {}).dataset?.l || 'Intermediario',
     mode:    (document.querySelector('#mog .mode-card.sel') || {}).dataset?.mo || 'explicacao',
