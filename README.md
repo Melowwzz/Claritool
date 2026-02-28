@@ -276,8 +276,4 @@ Claritool/
 - **Validação de input**: limite de caracteres (15k), tamanho de imagem (20MB), pool fixo de modelos
 - **Sem dados persistentes**: histórico vive apenas na sessão do browser (in-memory)
 
----
-
-## Licença
-
-MIT
+--
