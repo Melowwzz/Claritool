@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Claritool Chat — Aprenda com IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   CLARITOOL CHAT — Dark Theme
+   ═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a0a0a;
+  --bg2:#111;
+  --surface:#161616;
+  --surface2:#1c1c1c;
+  --surface3:#232323;
+  --surface4:#2a2a2a;
+  --border:rgba(255,255,255,.06);
+  --border2:rgba(255,255,255,.10);
+  --border3:rgba(255,255,255,.16);
+  --white:#f0ece6;
+  --text:#b0a99f;
+  --muted:#6b655c;
+  --dim:#3d3a35;
+  --accent:#d4a574;
+  --accent2:#c4956a;
+  --accent-bg:rgba(212,165,116,.08);
+  --accent-bg2:rgba(212,165,116,.14);
+  --green:#7bc4a0;
+  --green-bg:rgba(123,196,160,.08);
+  --red:#d4766a;
+  --blue:#7ba4d4;
+  --blue-bg:rgba(123,164,212,.08);
+  --r:12px;
+  --rs:8px;
+  --font:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.22,.68,0,1);
+}
+
+html{-webkit-tap-highlight-color:transparent}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ─── Layout ─── */
+.app{
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  height:100dvh;
+  max-width:900px;
+  margin:0 auto;
+  position:relative;
+}
+
+/* ─── Header ─── */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  background:var(--bg);
+  z-index:10;
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-dot{
+  width:10px;height:10px;
+  background:var(--accent);
+  border-radius:50%;
+  box-shadow:0 0 12px rgba(212,165,116,.4);
+}
+.logo-text{font-size:1rem;font-weight:600;color:var(--white);letter-spacing:-.02em}
+.logo-label{font-size:.7rem;color:var(--muted);font-weight:400;margin-left:2px}
+.header-actions{display:flex;gap:8px;align-items:center}
+
+.btn-icon{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .2s var(--ease);
+  font-size:1.1rem;
+}
+.btn-icon:hover{border-color:var(--border2);color:var(--white);background:var(--surface)}
+
+.btn-back{
+  font-size:.8rem;
+  font-weight:500;
+  color:var(--muted);
+  text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  transition:all .2s var(--ease);
+}
+.btn-back:hover{color:var(--white);border-color:var(--border2);background:var(--surface)}
+
+/* ─── Messages Area ─── */
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:24px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  scroll-behavior:smooth;
+}
+
+/* Welcome screen */
+.welcome{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex:1;
+  text-align:center;
+  padding:40px 20px;
+  animation:fadeIn .5s var(--ease);
+}
+.welcome-icon{
+  width:64px;height:64px;
+  border-radius:20px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+  font-size:1.5rem;
+}
+.welcome-icon::after{
+  content:'';
+  width:24px;height:24px;
+  background:var(--accent);
+  border-radius:50%;
+  box-shadow:0 0 20px rgba(212,165,116,.3);
+}
+.welcome h2{
+  font-size:1.4rem;
+  color:var(--white);
+  font-weight:600;
+  margin-bottom:8px;
+}
+.welcome p{
+  color:var(--muted);
+  font-size:.9rem;
+  max-width:400px;
+  line-height:1.6;
+}
+.welcome-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-top:24px;
+  max-width:500px;
+}
+.welcome-chip{
+  padding:8px 16px;
+  border:1px solid var(--border2);
+  border-radius:99px;
+  background:var(--surface);
+  color:var(--text);
+  font-size:.82rem;
+  cursor:pointer;
+  transition:all .2s var(--ease);
+}
+.welcome-chip:hover{border-color:var(--accent);color:var(--white);background:var(--surface2)}
+
+/* Message bubbles */
+.msg{
+  display:flex;
+  gap:12px;
+  max-width:100%;
+  animation:msgIn .3s var(--ease);
+}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.msg-user{justify-content:flex-end}
+.msg-user .bubble{
+  background:var(--surface3);
+  border:1px solid var(--border2);
+  color:var(--white);
+  border-radius:var(--r) var(--r) 4px var(--r);
+  max-width:75%;
+}
+.msg-ai{justify-content:flex-start}
+.msg-ai .bubble{
+  background:transparent;
+  color:var(--text);
+  max-width:85%;
+  border-radius:var(--r) var(--r) var(--r) 4px;
+  padding:4px 0;
+}
+.bubble{
+  padding:12px 16px;
+  font-size:.9rem;
+  line-height:1.7;
+  word-break:break-word;
+  overflow-wrap:break-word;
+}
+.bubble p{margin-bottom:10px}
+.bubble p:last-child{margin-bottom:0}
+.bubble strong{color:var(--white);font-weight:600}
+.bubble em{color:var(--accent);font-style:italic}
+.bubble code{
+  font-family:var(--mono);
+  font-size:.82rem;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:2px 6px;
+  border-radius:4px;
+  color:var(--accent);
+}
+.bubble pre{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  padding:14px 16px;
+  overflow-x:auto;
+  margin:12px 0;
+  font-size:.82rem;
+  line-height:1.5;
+}
+.bubble pre code{
+  background:none;
+  border:none;
+  padding:0;
+  color:var(--text);
+}
+.bubble ul,.bubble ol{padding-left:20px;margin:8px 0}
+.bubble li{margin-bottom:4px}
+.bubble blockquote{
+  border-left:3px solid var(--accent);
+  padding-left:14px;
+  color:var(--muted);
+  margin:10px 0;
+}
+.bubble h1,.bubble h2,.bubble h3,.bubble h4{
+  color:var(--white);
+  margin:16px 0 8px;
+  font-weight:600;
+}
+.bubble h1{font-size:1.2rem}
+.bubble h2{font-size:1.1rem}
+.bubble h3{font-size:1rem}
+.bubble a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.bubble a:hover{color:var(--accent2)}
+
+/* AI avatar */
+.ai-avatar{
+  width:28px;height:28px;
+  border-radius:8px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  margin-top:4px;
+}
+.ai-avatar::after{
+  content:'';
+  width:10px;height:10px;
+  background:var(--accent);
+  border-radius:50%;
+}
+
+/* Model badge under AI messages */
+.msg-meta{
+  font-size:.7rem;
+  color:var(--dim);
+  margin-top:4px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.msg-meta .badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 8px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  font-size:.65rem;
+  color:var(--muted);
+}
+.badge-think{background:var(--blue-bg);border-color:rgba(123,164,212,.15);color:var(--blue)}
+
+/* Vision badge on user messages with images */
+.vision-tag{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:4px;
+  background:var(--accent-bg);
+  border:1px solid var(--accent-bg2);
+  color:var(--accent);
+  font-size:.72rem;
+  margin-top:6px;
+}
+
+/* Image thumbnail in user bubble */
+.msg-img{
+  max-width:240px;
+  max-height:180px;
+  border-radius:var(--rs);
+  margin-top:8px;
+  border:1px solid var(--border);
+}
+
+/* Typing indicator */
+.typing{display:flex;gap:5px;padding:8px 0;align-items:center}
+.typing span{
+  width:7px;height:7px;
+  background:var(--muted);
+  border-radius:50%;
+  animation:typeBounce 1.2s ease infinite;
+}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes typeBounce{
+  0%,60%,100%{transform:translateY(0);opacity:.4}
+  30%{transform:translateY(-6px);opacity:1}
+}
+
+/* Think indicator */
+.think-status{
+  font-size:.78rem;
+  color:var(--blue);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 0;
+}
+.think-spinner{
+  width:14px;height:14px;
+  border:2px solid var(--border2);
+  border-top-color:var(--blue);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Search results card */
+.search-card{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:16px;
+  margin:8px 0;
+}
+.search-card h4{
+  font-size:.82rem;
+  color:var(--white);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.search-item{
+  padding:10px 0;
+  border-top:1px solid var(--border);
+}
+.search-item:first-of-type{border-top:none;padding-top:0}
+.search-item .s-title{font-size:.85rem;font-weight:600;color:var(--white);margin-bottom:4px}
+.search-item .s-text{font-size:.82rem;color:var(--text);line-height:1.5}
+.search-item a{
+  font-size:.75rem;
+  color:var(--accent);
+  text-decoration:none;
+  display:inline-block;
+  margin-top:4px;
+}
+.search-item a:hover{text-decoration:underline}
+
+/* ─── Input Area ─── */
+.input-area{
+  border-top:1px solid var(--border);
+  padding:12px 20px 16px;
+  flex-shrink:0;
+  background:var(--bg);
+}
+
+/* Mode toggle */
+.mode-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+  gap:12px;
+}
+.mode-toggle{
+  display:flex;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:99px;
+  padding:3px;
+  gap:2px;
+}
+.mode-btn{
+  padding:5px 14px;
+  border:none;
+  background:transparent;
+  color:var(--muted);
+  font-family:var(--font);
+  font-size:.75rem;
+  font-weight:600;
+  border-radius:99px;
+  cursor:pointer;
+  transition:all .2s var(--ease);
+  white-space:nowrap;
+}
+.mode-btn:hover{color:var(--text)}
+.mode-btn.active{
+  background:var(--surface3);
+  color:var(--white);
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.mode-btn.active[data-mode="think"]{
+  background:var(--blue-bg);
+  border:1px solid rgba(123,164,212,.15);
+  color:var(--blue);
+}
+
+.input-hints{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.hint{
+  font-size:.68rem;
+  color:var(--dim);
+}
+
+/* Image preview bar */
+.img-bar{
+  display:none;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  margin-bottom:10px;
+}
+.img-bar.show{display:flex}
+.img-bar img{
+  width:48px;height:48px;
+  object-fit:cover;
+  border-radius:6px;
+  border:1px solid var(--border2);
+}
+.img-bar span{font-size:.78rem;color:var(--muted);flex:1}
+.img-bar .remove{
+  width:24px;height:24px;
+  border:none;
+  background:var(--surface3);
+  border-radius:50%;
+  color:var(--muted);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+  transition:all .15s;
+}
+.img-bar .remove:hover{background:var(--red);color:var(--white)}
+
+/* Search bar */
+.search-bar{
+  display:none;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  margin-bottom:10px;
+}
+.search-bar.show{display:flex}
+.search-bar input{
+  flex:1;
+  background:transparent;
+  border:none;
+  color:var(--white);
+  font-family:var(--font);
+  font-size:.85rem;
+  outline:none;
+}
+.search-bar input::placeholder{color:var(--dim)}
+.search-bar .s-btn{
+  padding:5px 12px;
+  border:1px solid var(--accent-bg2);
+  background:var(--accent-bg);
+  color:var(--accent);
+  border-radius:var(--rs);
+  font-size:.78rem;
+  font-weight:600;
+  cursor:pointer;
+  font-family:var(--font);
+  transition:all .15s;
+}
+.search-bar .s-btn:hover{background:var(--accent-bg2)}
+.search-bar .s-close{
+  background:none;
+  border:none;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:1.1rem;
+  padding:2px;
+}
+.search-bar .s-close:hover{color:var(--white)}
+
+/* Compose box */
+.compose{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:8px 8px 8px 14px;
+  transition:border-color .2s;
+}
+.compose:focus-within{border-color:var(--border3)}
+.compose textarea{
+  flex:1;
+  background:transparent;
+  border:none;
+  color:var(--white);
+  font-family:var(--font);
+  font-size:.9rem;
+  line-height:1.5;
+  resize:none;
+  outline:none;
+  min-height:24px;
+  max-height:150px;
+  padding:4px 0;
+}
+.compose textarea::placeholder{color:var(--dim)}
+
+.compose-btn{
+  width:34px;height:34px;
+  border:none;
+  border-radius:var(--rs);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:all .15s var(--ease);
+  flex-shrink:0;
+  font-size:1.1rem;
+  background:transparent;
+  color:var(--muted);
+}
+.compose-btn:hover{color:var(--white);background:var(--surface2)}
+.compose-btn:disabled{opacity:.3;cursor:not-allowed}
+.compose-btn.send{
+  background:var(--white);
+  color:var(--bg);
+}
+.compose-btn.send:hover{background:var(--accent);color:var(--bg)}
+.compose-btn.send:disabled{background:var(--surface3);color:var(--dim)}
+
+input[type=file]{display:none}
+
+/* ─── Toast ─── */
+.toast-wrap{
+  position:fixed;
+  top:20px;left:50%;
+  transform:translateX(-50%);
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  pointer-events:none;
+}
+.toast{
+  padding:10px 20px;
+  border-radius:var(--rs);
+  font-size:.82rem;
+  font-weight:500;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--white);
+  animation:toastIn .3s var(--ease);
+  pointer-events:auto;
+}
+.toast.ok{background:var(--green-bg);border-color:rgba(123,196,160,.2);color:var(--green)}
+.toast.warn{background:rgba(212,118,106,.08);border-color:rgba(212,118,106,.15);color:var(--red)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+/* ─── Responsive ─── */
+@media(max-width:600px){
+  .header{padding:12px 16px}
+  .messages{padding:16px}
+  .input-area{padding:10px 16px 14px}
+  .msg-user .bubble{max-width:85%}
+  .msg-ai .bubble{max-width:95%}
+  .welcome-chips{gap:6px}
+  .welcome-chip{font-size:.78rem;padding:6px 12px}
+  .logo-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Header -->
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="index.html" class="btn-back">&#8592; Inicio</a>
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <span class="logo-text">Claritool</span>
+        <span class="logo-label">Chat</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" onclick="clearChat()" title="Nova conversa">&#10227;</button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages" id="messages">
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon"></div>
+      <h2>No que posso te ajudar?</h2>
+      <p>Sou a Clara, sua assistente de aprendizado. Pergunte qualquer coisa, envie imagens ou use a busca web.</p>
+      <div class="welcome-chips">
+        <div class="welcome-chip" onclick="quickStart('Me explica fotossintese de um jeito simples')">Fotossintese simples</div>
+        <div class="welcome-chip" onclick="quickStart('Quais foram as causas da Segunda Guerra Mundial?')">Causas da 2a Guerra</div>
+        <div class="welcome-chip" onclick="quickStart('Me ensina Python do zero')">Python do zero</div>
+        <div class="welcome-chip" onclick="quickStart('Como funciona a gravidade?')">Como funciona gravidade</div>
+        <div class="welcome-chip" onclick="quickStart('Me ajuda a entender fracoes')">Entender fracoes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <!-- Mode toggle -->
+    <div class="mode-row">
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="quick" onclick="setMode('quick')">Resposta rapida</button>
+        <button class="mode-btn" data-mode="think" onclick="setMode('think')">Pensar mais</button>
+      </div>
+      <div class="input-hints">
+        <span class="hint" id="mode-hint">Resposta direta e rapida</span>
+      </div>
+    </div>
+
+    <!-- Image preview -->
+    <div class="img-bar" id="img-bar">
+      <img id="img-thumb" src="" alt=""/>
+      <span>Imagem anexada</span>
+      <button class="remove" onclick="clearImage()">&#10005;</button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="search-bar" id="search-bar">
+      <span style="font-size:1rem">&#128269;</span>
+      <input type="text" id="search-input" placeholder="Pesquisar na web..." onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch()}"/>
+      <button class="s-btn" onclick="doSearch()">Buscar</button>
+      <button class="s-close" onclick="toggleSearch()">&#10005;</button>
+    </div>
+
+    <!-- Compose -->
+    <div class="compose">
+      <button class="compose-btn" onclick="document.getElementById('file-input').click()" title="Enviar imagem">&#128247;</button>
+      <input type="file" id="file-input" accept="image/*" onchange="handleFile(this)"/>
+      <button class="compose-btn" onclick="toggleSearch()" title="Pesquisar na web">&#128269;</button>
+      <textarea id="input" rows="1" placeholder="Pergunte qualquer coisa..."
+        onkeydown="handleKey(event)"
+        oninput="autoGrow(this)"
+        onpaste="handlePaste(event)"></textarea>
+      <button class="compose-btn send" id="send-btn" onclick="send()" title="Enviar">&#10148;</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   CLARITOOL CHAT — JavaScript
+   ═══════════════════════════════════════ */
+
+const API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:8787'
+  : 'https://claritool-worker.ramonxavierluan.workers.dev'
+
+/* ── State ── */
+let chatHistory = []
+let currentMode = 'quick'
+let pendingImage = null
+let searchContext = null
+let isBusy = false
+
+/* ── System Prompt ── */
+const SYSTEM = `Voce e a Clara, uma assistente de aprendizado excepcional. Voce foi criada para ensinar, esclarecer duvidas e guiar estudantes brasileiros com paciencia e didatica.
+
+## PERSONALIDADE
+- Amigavel, paciente e encorajadora
+- Usa linguagem informal brasileira (mas sem girias excessivas)
+- Celebra acertos genuinamente e trata erros com empatia
+- Explica conceitos complexos de forma simples, usando analogias do cotidiano
+
+## METODO DE ENSINO
+1. Sempre comece entendendo o que o aluno ja sabe antes de explicar
+2. Ensine de forma progressiva: do mais simples ao mais complexo
+3. Use o metodo socratico: faca perguntas que levem o aluno a descobrir a resposta
+4. Dê exemplos concretos e praticos — nunca fique so no abstrato
+5. Use analogias do dia a dia (comparacoes com coisas que jovens brasileiros conhecem)
+6. Apos explicar, verifique se o aluno entendeu: "Fez sentido? Quer que eu explique de outro jeito?"
+
+## FORMATO DAS RESPOSTAS
+- Paragrafos CURTOS (max 3-4 linhas cada)
+- Use **negrito** para termos importantes
+- Use listas quando organizar informacoes
+- Use blocos de codigo quando mostrar codigo
+- NUNCA mande blocos enormes de texto — quebre em partes digeríveis
+- Use titulos (##, ###) para organizar respostas longas
+
+## QUANDO RECEBER IMAGENS
+- Analise a imagem em detalhe
+- Se for foto de caderno/exercicio: ajude a resolver passo a passo
+- Se for diagrama/grafico: explique o que esta representado
+- Se for screenshot de codigo: analise, encontre erros, sugira melhorias
+- Sempre relacione a imagem com o contexto da conversa
+
+## QUANDO RECEBER CONTEXTO DE PESQUISA WEB
+- Use os dados para enriquecer sua resposta com informacoes atualizadas
+- Cite as fontes quando relevante ("Segundo a Wikipedia...")
+- Combine seu conhecimento com os dados da pesquisa
+
+## REGRAS ABSOLUTAS
+- Responda SEMPRE em portugues brasileiro
+- NUNCA invente dados ou estatisticas — se nao sabe, diga que nao sabe
+- Se o assunto for perigoso ou antiético, recuse educadamente
+- NUNCA termine uma resposta sem convidar o aluno a continuar a conversa
+- Adapte a complexidade ao nivel do aluno (se ele usa termos simples, simplifique; se usa termos tecnicos, aprofunde)`
+
+/* ── Mode Toggle ── */
+function setMode(m) {
+  currentMode = m
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m))
+  document.getElementById('mode-hint').textContent = m === 'quick'
+    ? 'Resposta direta e rapida'
+    : 'A IA vai pensar 3x antes de responder'
+}
+
+/* ── Toast ── */
+function toast(msg, type) {
+  var wrap = document.getElementById('toasts')
+  var el = document.createElement('div')
+  el.className = 'toast' + (type ? ' ' + type : '')
+  el.textContent = msg
+  wrap.appendChild(el)
+  setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove() }, 300) }, 3000)
+}
+
+/* ── Markdown Rendering ── */
+function md(text) {
+  var s = text
+  // Code blocks
+  s = s.replace(/```(\w*)\n([\s\S]*?)```/g, function(_, lang, code) {
+    return '<pre><code>' + escHtml(code.trim()) + '</code></pre>'
+  })
+  // Inline code
+  s = s.replace(/`([^`]+)`/g, '<code>$1</code>')
+  // Headers
+  s = s.replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+  s = s.replace(/^### (.+)$/gm, '<h3>$1</h3>')
+  s = s.replace(/^## (.+)$/gm, '<h2>$1</h2>')
+  s = s.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+  // Bold + italic
+  s = s.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  s = s.replace(/\*(.+?)\*/g, '<em>$1</em>')
+  // Blockquote
+  s = s.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+  // Unordered list
+  s = s.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>')
+  s = s.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>')
+  // Ordered list
+  s = s.replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+  // Links
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+  // Paragraphs
+  s = s.replace(/\n{2,}/g, '</p><p>')
+  s = '<p>' + s + '</p>'
+  s = s.replace(/<p>\s*(<h[1-4]>)/g, '$1')
+  s = s.replace(/(<\/h[1-4]>)\s*<\/p>/g, '$1')
+  s = s.replace(/<p>\s*(<pre>)/g, '$1')
+  s = s.replace(/(<\/pre>)\s*<\/p>/g, '$1')
+  s = s.replace(/<p>\s*(<ul>)/g, '$1')
+  s = s.replace(/(<\/ul>)\s*<\/p>/g, '$1')
+  s = s.replace(/<p>\s*(<blockquote>)/g, '$1')
+  s = s.replace(/(<\/blockquote>)\s*<\/p>/g, '$1')
+  s = s.replace(/<p><\/p>/g, '')
+  // Line breaks
+  s = s.replace(/\n/g, '<br/>')
+  return s
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+}
+
+/* ── DOM Helpers ── */
+var msgsEl = document.getElementById('messages')
+var inputEl = document.getElementById('input')
+
+function hideWelcome() {
+  var w = document.getElementById('welcome')
+  if (w) w.remove()
+}
+
+function addUserMsg(text, imgSrc) {
+  hideWelcome()
+  var div = document.createElement('div')
+  div.className = 'msg msg-user'
+  var html = '<div class="bubble">' + escHtml(text)
+  if (imgSrc) {
+    html += '<br/><img class="msg-img" src="' + imgSrc + '" alt="Imagem enviada"/>'
+    html += '<br/><span class="vision-tag">Imagem enviada</span>'
+  }
+  html += '</div>'
+  div.innerHTML = html
+  msgsEl.appendChild(div)
+  scrollBottom()
+}
+
+function addAiMsg(text, model, mode) {
+  hideWelcome()
+  var div = document.createElement('div')
+  div.className = 'msg msg-ai'
+  var metaHtml = ''
+  if (model || mode === 'think') {
+    metaHtml = '<div class="msg-meta">'
+    if (model) metaHtml += '<span class="badge">' + escHtml(model) + '</span>'
+    if (mode === 'think') metaHtml += '<span class="badge badge-think">Pensamento profundo</span>'
+    metaHtml += '</div>'
+  }
+  div.innerHTML = '<div class="ai-avatar"></div><div style="flex:1;min-width:0"><div class="bubble">' + md(text) + '</div>' + metaHtml + '</div>'
+  msgsEl.appendChild(div)
+  scrollBottom()
+}
+
+function showTyping() {
+  hideWelcome()
+  var div = document.createElement('div')
+  div.className = 'msg msg-ai'
+  div.id = 'typing'
+  div.innerHTML = '<div class="ai-avatar"></div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>'
+  msgsEl.appendChild(div)
+  scrollBottom()
+}
+
+function showThinking(step) {
+  var el = document.getElementById('typing')
+  if (!el) return
+  var labels = ['Gerando resposta inicial...', 'Refinando (1/3)...', 'Refinando (2/3)...', 'Refinando (3/3)...']
+  var label = labels[step] || 'Pensando...'
+  el.querySelector('.bubble').innerHTML = '<div class="think-status"><div class="think-spinner"></div>' + label + '</div>'
+  scrollBottom()
+}
+
+function hideTyping() {
+  var el = document.getElementById('typing')
+  if (el) el.remove()
+}
+
+function scrollBottom() {
+  msgsEl.scrollTop = msgsEl.scrollHeight
+}
+
+function autoGrow(el) {
+  el.style.height = 'auto'
+  el.style.height = Math.min(el.scrollHeight, 150) + 'px'
+}
+
+/* ── Search Results UI ── */
+function addSearchResults(query, data) {
+  hideWelcome()
+  var div = document.createElement('div')
+  div.className = 'msg msg-ai'
+
+  var html = '<div class="ai-avatar"></div><div style="flex:1;min-width:0"><div class="bubble"><div class="search-card"><h4>&#128269; Resultados: ' + escHtml(query) + '</h4>'
+  var hasResults = false
+
+  if (data.wiki) {
+    hasResults = true
+    html += '<div class="search-item">'
+    html += '<div class="s-title">' + escHtml(data.wiki.title) + '</div>'
+    html += '<div class="s-text">' + escHtml(data.wiki.text) + '</div>'
+    if (data.wiki.url) html += '<a href="' + data.wiki.url + '" target="_blank" rel="noopener">Wikipedia &#8599;</a>'
+    html += '</div>'
+  }
+
+  if (data.instant && (!data.wiki || data.instant.text !== data.wiki.text)) {
+    hasResults = true
+    html += '<div class="search-item">'
+    html += '<div class="s-title">' + escHtml(data.instant.title) + '</div>'
+    html += '<div class="s-text">' + escHtml(data.instant.text) + '</div>'
+    if (data.instant.url) html += '<a href="' + data.instant.url + '" target="_blank" rel="noopener">' + escHtml(data.instant.source || 'Fonte') + ' &#8599;</a>'
+    html += '</div>'
+  }
+
+  if (data.related && data.related.length > 0) {
+    hasResults = true
+    html += '<div class="search-item"><div class="s-title">Relacionados</div>'
+    for (var i = 0; i < Math.min(data.related.length, 3); i++) {
+      html += '<div class="s-text">&bull; ' + escHtml(data.related[i].text) + '</div>'
+    }
+    html += '</div>'
+  }
+
+  if (!hasResults) {
+    html += '<div class="search-item"><div class="s-text">Nenhum resultado encontrado.</div></div>'
+  }
+
+  html += '</div></div></div></div>'
+  div.innerHTML = html
+  msgsEl.appendChild(div)
+  scrollBottom()
+}
+
+/* ── Image Handling ── */
+function resizeImg(dataUrl, maxSize) {
+  return new Promise(function(resolve) {
+    var img = new Image()
+    img.onload = function() {
+      var w = img.width, h = img.height
+      if (w <= maxSize && h <= maxSize) { resolve(dataUrl); return }
+      var scale = maxSize / Math.max(w, h)
+      w = Math.round(w * scale); h = Math.round(h * scale)
+      var c = document.createElement('canvas')
+      c.width = w; c.height = h
+      c.getContext('2d').drawImage(img, 0, 0, w, h)
+      resolve(c.toDataURL('image/jpeg', 0.85))
+    }
+    img.src = dataUrl
+  })
+}
+
+function readFile(file) {
+  return new Promise(function(resolve, reject) {
+    var r = new FileReader()
+    r.onload = function() { resolve(r.result) }
+    r.onerror = reject
+    r.readAsDataURL(file)
+  })
+}
+
+async function processImage(file) {
+  if (!file || !file.type.startsWith('image/')) return
+  if (file.size > 20 * 1024 * 1024) { toast('Imagem muito grande (max 20MB)', 'warn'); return }
+  try {
+    var dataUrl = await readFile(file)
+    var resized = await resizeImg(dataUrl, 1024)
+    pendingImage = resized
+    document.getElementById('img-thumb').src = resized
+    document.getElementById('img-bar').classList.add('show')
+    toast('Imagem anexada', 'ok')
+  } catch(e) {
+    toast('Erro ao processar imagem', 'warn')
+  }
+}
+
+function clearImage() {
+  pendingImage = null
+  document.getElementById('img-thumb').src = ''
+  document.getElementById('img-bar').classList.remove('show')
+}
+
+function handleFile(input) {
+  if (input.files && input.files[0]) processImage(input.files[0])
+  input.value = ''
+}
+
+function handlePaste(event) {
+  var items = (event.clipboardData || {}).items
+  if (!items) return
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      event.preventDefault()
+      processImage(items[i].getAsFile())
+      return
+    }
+  }
+}
+
+/* ── Search ── */
+function toggleSearch() {
+  var bar = document.getElementById('search-bar')
+  bar.classList.toggle('show')
+  if (bar.classList.contains('show')) {
+    document.getElementById('search-input').focus()
+  }
+}
+
+async function doSearch() {
+  var input = document.getElementById('search-input')
+  var query = input.value.trim()
+  if (!query) return
+  input.value = ''
+  toggleSearch()
+
+  toast('Pesquisando: ' + query, 'ok')
+
+  try {
+    var res = await fetch(API + '/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query })
+    })
+    var data = await res.json()
+
+    addSearchResults(query, data)
+
+    // Save context for next AI response
+    if (data.context) {
+      searchContext = data.context
+      toast('Resultados serao usados pela IA na proxima resposta', 'ok')
+    }
+  } catch(e) {
+    toast('Erro na pesquisa: ' + e.message, 'warn')
+  }
+}
+
+/* ── Send Message ── */
+function handleKey(event) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    send()
+  }
+}
+
+async function send() {
+  var text = inputEl.value.trim()
+  if ((!text && !pendingImage) || isBusy) return
+
+  isBusy = true
+  document.getElementById('send-btn').disabled = true
+
+  // Show user message
+  addUserMsg(text || '(imagem)', pendingImage || null)
+
+  // Build message content
+  var content
+  if (pendingImage) {
+    content = []
+    if (text) content.push({ type: 'text', text: text })
+    content.push({ type: 'image_url', image_url: { url: pendingImage } })
+    clearImage()
+  } else {
+    content = text
+  }
+
+  chatHistory.push({ role: 'user', content: content })
+  inputEl.value = ''
+  inputEl.style.height = 'auto'
+
+  // Prepare payload — strip images from old messages to save tokens
+  var recent = chatHistory.slice(-16)
+  var payload = recent.map(function(m, i) {
+    if (i < recent.length - 4 && Array.isArray(m.content)) {
+      var textParts = m.content.filter(function(c) { return c.type === 'text' })
+      return { role: m.role, content: textParts.length ? textParts[0].text : '[imagem]' }
+    }
+    return m
+  })
+
+  // Show typing indicator
+  showTyping()
+  var thinkInterval = null
+  if (currentMode === 'think') {
+    showThinking(0)
+    var step = 0
+    thinkInterval = setInterval(function() {
+      step++
+      if (step <= 3) showThinking(step)
+    }, 4000)
+  }
+
+  try {
+    var res = await fetch(API + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: payload,
+        system: SYSTEM,
+        mode: currentMode,
+        searchContext: searchContext || undefined,
+      })
+    })
+
+    var data = await res.json()
+    if (thinkInterval) clearInterval(thinkInterval)
+    hideTyping()
+
+    if (data.error) {
+      toast(data.error, 'warn')
+      addAiMsg('Desculpa, tive um problema: ' + data.error, null, null)
+    } else {
+      chatHistory.push({ role: 'assistant', content: data.result })
+      addAiMsg(data.result, data.usedModelName, data.mode)
+    }
+
+    // Clear search context after using
+    searchContext = null
+  } catch(e) {
+    if (thinkInterval) clearInterval(thinkInterval)
+    hideTyping()
+    toast('Erro de conexao: ' + e.message, 'warn')
+    addAiMsg('Nao consegui me conectar ao servidor. Tente novamente.', null, null)
+  }
+
+  isBusy = false
+  document.getElementById('send-btn').disabled = false
+  inputEl.focus()
+}
+
+/* ── Quick Start ── */
+function quickStart(text) {
+  inputEl.value = text
+  send()
+}
+
+/* ── Clear Chat ── */
+function clearChat() {
+  chatHistory = []
+  searchContext = null
+  pendingImage = null
+  clearImage()
+  msgsEl.innerHTML = ''
+  // Rebuild welcome
+  var w = document.createElement('div')
+  w.className = 'welcome'
+  w.id = 'welcome'
+  w.innerHTML = '<div class="welcome-icon"></div><h2>No que posso te ajudar?</h2><p>Sou a Clara, sua assistente de aprendizado. Pergunte qualquer coisa, envie imagens ou use a busca web.</p><div class="welcome-chips"><div class="welcome-chip" onclick="quickStart(\'Me explica fotossintese de um jeito simples\')">Fotossintese simples</div><div class="welcome-chip" onclick="quickStart(\'Quais foram as causas da Segunda Guerra Mundial?\')">Causas da 2a Guerra</div><div class="welcome-chip" onclick="quickStart(\'Me ensina Python do zero\')">Python do zero</div><div class="welcome-chip" onclick="quickStart(\'Como funciona a gravidade?\')">Como funciona gravidade</div><div class="welcome-chip" onclick="quickStart(\'Me ajuda a entender fracoes\')">Entender fracoes</div></div>'
+  msgsEl.appendChild(w)
+}
+</script>
+</body>
+</html>

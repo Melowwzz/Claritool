@@ -1,11 +1,10 @@
 /**
- * Claritool — Cloudflare Worker (Groq API)
- * Enhanced: system role, vision model routing, web search (DDG + Wikipedia)
+ * Claritool — Cloudflare Worker
+ * Chat endpoint with think-more refinement, vision routing, web search
  */
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
-// ── Text models with fallback ──
 const TEXT_MODELS = [
   'llama-3.3-70b-versatile',
   'llama-3.1-70b-versatile',
@@ -14,7 +13,6 @@ const TEXT_MODELS = [
   'mixtral-8x7b-32768',
 ]
 
-// ── Vision models ──
 const VISION_MODELS = [
   'llama-3.2-90b-vision-preview',
   'llama-3.2-11b-vision-preview',
@@ -32,8 +30,32 @@ const MODEL_NAMES = {
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
+}
+
+const REFINE_INSTRUCTION = `Reescreva completamente sua resposta anterior de forma melhorada:
+- Corrija imprecisoes factuais
+- Melhore clareza e didatica com analogias melhores
+- Adicione exemplos concretos que faltaram
+- Mantenha o tom amigavel e educativo
+- Mantenha a mesma lingua
+- Escreva diretamente a resposta final — SEM mencionar revisao, melhoria ou reescrita`
+
+// Strip any meta-text residue from refinement loops
+function cleanRefinedOutput(text) {
+  const noise = [
+    /^(aqui est[aá]|segue|veja|confira)\s*(a\s*)?(vers[aã]o|resposta)\s*(melhorada|revisada|final|aprimorada|corrigida)[:\.\!\s]*/i,
+    /^(reescrevendo|revisando|melhorando|aprimorando)[:\.\!\s]*/i,
+    /^(com base na revis[aã]o|ap[oó]s revis[aã]o)[,:\.\!\s]*/i,
+    /^(vers[aã]o (final|melhorada|revisada))[:\.\!\s]*/i,
+    /^---+\s*/,
+  ]
+  let cleaned = text.trim()
+  for (const rx of noise) {
+    cleaned = cleaned.replace(rx, '')
+  }
+  return cleaned.trim()
 }
 
 function json(data, status = 200) {
@@ -43,7 +65,6 @@ function json(data, status = 200) {
   })
 }
 
-// Detect if messages contain image content → route to vision model
 function hasImages(messages) {
   return messages.some(m =>
     Array.isArray(m.content) &&
@@ -51,11 +72,7 @@ function hasImages(messages) {
   )
 }
 
-async function callGroq(apiKey, model, messages, system) {
-  const msgs = system
-    ? [{ role: 'system', content: system }, ...messages]
-    : messages
-
+async function callGroq(apiKey, model, messages, temperature = 0.7, maxTokens = 4096) {
   return fetch(GROQ_URL, {
     method: 'POST',
     headers: {
@@ -64,18 +81,60 @@ async function callGroq(apiKey, model, messages, system) {
     },
     body: JSON.stringify({
       model,
-      messages: msgs,
-      max_tokens: 4096,
-      temperature: 0.7,
+      messages,
+      max_tokens: maxTokens,
+      temperature,
     }),
   })
 }
 
-// ── Web Search: DuckDuckGo Instant Answer + Wikipedia ──
+// Try models in order, return { result, usedModel } or throw
+async function tryModels(apiKey, pool, messages, temperature, maxTokens) {
+  let lastError = null
+
+  for (const m of pool) {
+    let res
+    try {
+      res = await callGroq(apiKey, m, messages, temperature, maxTokens)
+    } catch (err) {
+      lastError = `Erro de rede: ${err.message}`
+      continue
+    }
+
+    if (res.status === 429) {
+      lastError = `Modelo ${m} sobrecarregado`
+      continue
+    }
+
+    if (!res.ok) {
+      let errBody
+      try { errBody = await res.json() } catch { errBody = {} }
+      lastError = errBody?.error?.message || `Erro ${res.status} no modelo ${m}`
+      continue
+    }
+
+    let data
+    try { data = await res.json() } catch {
+      lastError = 'Resposta invalida da API'
+      continue
+    }
+
+    const result = data?.choices?.[0]?.message?.content
+    if (!result) {
+      lastError = 'Resposta vazia do modelo'
+      continue
+    }
+
+    return { result, usedModel: m, usedModelName: MODEL_NAMES[m] || m }
+  }
+
+  throw new Error(lastError || 'Todos os modelos estao ocupados.')
+}
+
+// ── Web Search: DuckDuckGo + Wikipedia ──
 async function webSearch(query) {
   const out = { instant: null, wiki: null, related: [] }
 
-  // DuckDuckGo Instant Answer API (free, no key)
   try {
     const ddgUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
     const r = await fetch(ddgUrl, { headers: { 'User-Agent': 'Claritool/1.0' } })
@@ -96,7 +155,6 @@ async function webSearch(query) {
     }
   } catch {}
 
-  // Wikipedia PT
   try {
     const r = await fetch(
       `https://pt.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`,
@@ -114,7 +172,6 @@ async function webSearch(query) {
     }
   } catch {}
 
-  // Fallback: Wikipedia EN
   if (!out.wiki) {
     try {
       const r = await fetch(
@@ -137,16 +194,50 @@ async function webSearch(query) {
   return out
 }
 
+// Format search results as context string for AI
+function formatSearchContext(data) {
+  let ctx = ''
+  if (data.wiki) ctx += `Wikipedia (${data.wiki.title}): ${data.wiki.text}\n\n`
+  if (data.instant) ctx += `${data.instant.source || 'DuckDuckGo'} (${data.instant.title}): ${data.instant.text}\n\n`
+  if (data.related) {
+    for (const r of data.related) {
+      ctx += `- ${r.text}\n`
+    }
+  }
+  return ctx.trim()
+}
+
 export default {
   async fetch(request, env) {
-    // CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: CORS })
     }
 
     const url = new URL(request.url)
 
+    // ── Serve chat.html ──
+    if (url.pathname === '/chat' && request.method === 'GET') {
+      // Serve from KV or redirect — handled by Pages/static
+      // For workers, we return a redirect or serve inline
+      return new Response(null, {
+        status: 302,
+        headers: { 'Location': '/chat.html', ...CORS },
+      })
+    }
+
     // ── Search endpoint ──
+    if (url.pathname === '/api/search' && request.method === 'POST') {
+      try {
+        const { query } = await request.json()
+        if (!query) return json({ error: 'query is required' }, 400)
+        const data = await webSearch(query)
+        return json({ ...data, context: formatSearchContext(data) })
+      } catch {
+        return json({ error: 'Invalid request' }, 400)
+      }
+    }
+
+    // ── Legacy search endpoint ──
     if (url.pathname === '/search' && request.method === 'POST') {
       try {
         const { query } = await request.json()
@@ -158,78 +249,105 @@ export default {
     }
 
     // ── Chat endpoint ──
-    if (request.method !== 'POST') {
-      return json({ error: 'Method not allowed' }, 405)
-    }
-
-    let body
-    try {
-      body = await request.json()
-    } catch {
-      return json({ error: 'Invalid JSON' }, 400)
-    }
-
-    const { model, messages, system } = body
-    if (!messages || !Array.isArray(messages)) {
-      return json({ error: 'messages is required' }, 400)
-    }
-
-    const apiKey = env.GROQ_API_KEY
-    if (!apiKey) {
-      return json({ error: 'API key not configured' }, 500)
-    }
-
-    // Auto-detect vision requests and route to vision models
-    const isVision = hasImages(messages)
-    const pool = isVision ? VISION_MODELS : TEXT_MODELS
-    const modelsToTry = model
-      ? [model, ...pool.filter(m => m !== model)]
-      : pool
-
-    let lastError = null
-
-    for (const m of modelsToTry) {
-      let res
+    if (url.pathname === '/api/chat' && request.method === 'POST') {
+      let body
       try {
-        res = await callGroq(apiKey, m, messages, system || null)
-      } catch (err) {
-        lastError = `Erro de rede: ${err.message}`
-        continue
+        body = await request.json()
+      } catch {
+        return json({ error: 'Invalid JSON' }, 400)
       }
 
-      if (res.status === 429) {
-        lastError = `Modelo ${m} sobrecarregado`
-        continue
+      const { messages, system, mode, searchContext } = body
+      if (!messages || !Array.isArray(messages)) {
+        return json({ error: 'messages is required' }, 400)
       }
 
-      if (!res.ok) {
-        let errBody
-        try { errBody = await res.json() } catch { errBody = {} }
-        lastError = errBody?.error?.message || `Erro ${res.status} no modelo ${m}`
-        continue
+      const apiKey = env.GROQ_API_KEY
+      if (!apiKey) {
+        return json({ error: 'API key not configured' }, 500)
       }
 
-      let data
-      try { data = await res.json() } catch {
-        lastError = 'Resposta inválida da API'
-        continue
+      // Build system message with optional search context
+      let sysContent = system || ''
+      if (searchContext) {
+        sysContent += `\n\n## CONTEXTO DE PESQUISA WEB (dados reais e atualizados — use para enriquecer sua resposta):\n${searchContext}`
       }
 
-      const result = data?.choices?.[0]?.message?.content
-      if (!result) {
-        lastError = 'Resposta vazia do modelo'
-        continue
-      }
+      const sysMsgs = sysContent
+        ? [{ role: 'system', content: sysContent }, ...messages]
+        : messages
 
-      return json({
-        result,
-        usedModel: m,
-        usedModelName: MODEL_NAMES[m] || m,
-      })
+      const isVision = hasImages(messages)
+      const pool = isVision ? VISION_MODELS : TEXT_MODELS
+
+      try {
+        // First response
+        let { result, usedModel, usedModelName } = await tryModels(apiKey, pool, sysMsgs, 0.7, 4096)
+
+        // "Think more" refinement loop (3 passes)
+        if (mode === 'think') {
+          const refinePool = TEXT_MODELS
+          for (let i = 0; i < 3; i++) {
+            const refineMessages = [
+              { role: 'system', content: sysContent || 'Voce e um assistente educacional.' },
+              ...messages,
+              { role: 'assistant', content: result },
+              { role: 'user', content: REFINE_INSTRUCTION },
+            ]
+            try {
+              const refined = await tryModels(apiKey, refinePool, refineMessages, 0.5, 4096)
+              result = cleanRefinedOutput(refined.result)
+              usedModel = refined.usedModel
+              usedModelName = refined.usedModelName
+            } catch {
+              break
+            }
+          }
+        }
+
+        return json({ result, usedModel, usedModelName, mode: mode || 'quick' })
+      } catch (e) {
+        return json({ error: e.message }, 429)
+      }
     }
 
-    return json({
-      error: lastError || 'Todos os modelos estão ocupados. Tente em alguns minutos.',
-    }, 429)
+    // ── Legacy root POST (for index.html compatibility) ──
+    if (request.method === 'POST' && (url.pathname === '/' || url.pathname === '')) {
+      let body
+      try {
+        body = await request.json()
+      } catch {
+        return json({ error: 'Invalid JSON' }, 400)
+      }
+
+      const { model, messages, system } = body
+      if (!messages || !Array.isArray(messages)) {
+        return json({ error: 'messages is required' }, 400)
+      }
+
+      const apiKey = env.GROQ_API_KEY
+      if (!apiKey) {
+        return json({ error: 'API key not configured' }, 500)
+      }
+
+      const isVision = hasImages(messages)
+      const pool = isVision ? VISION_MODELS : TEXT_MODELS
+      const modelsToTry = model
+        ? [model, ...pool.filter(m => m !== model)]
+        : pool
+
+      const sysMsgs = system
+        ? [{ role: 'system', content: system }, ...messages]
+        : messages
+
+      try {
+        const { result, usedModel, usedModelName } = await tryModels(apiKey, modelsToTry, sysMsgs)
+        return json({ result, usedModel, usedModelName })
+      } catch (e) {
+        return json({ error: e.message }, 429)
+      }
+    }
+
+    return json({ error: 'Not found' }, 404)
   },
 }
