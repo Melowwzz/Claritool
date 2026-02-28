@@ -782,34 +782,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
 }
 .qa-btn:hover{color:var(--accent);border-color:var(--accent-g2);background:var(--accent-g)}
 
-/* ─── Image Upload & Preview ─── */
-.img-upload-btn{
-  background:transparent;border:1px solid var(--border);
-  color:var(--muted);border-radius:var(--rs);
-  width:38px;height:38px;cursor:pointer;font-size:1.1rem;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .2s var(--ease);flex-shrink:0;
-  -webkit-appearance:none;font-family:var(--font);
-}
-.img-upload-btn:hover{color:var(--accent);border-color:var(--accent-g2)}
-.img-preview-wrap{
-  padding:8px 14px 0;background:var(--surface);
-  display:none;align-items:center;gap:10px;
-}
-.img-preview-wrap.vis{display:flex}
-.img-preview-wrap img{
-  max-height:72px;max-width:110px;border-radius:var(--rs);
-  border:1px solid var(--border2);object-fit:cover;
-}
-.img-remove{
-  background:var(--err-g);border:1px solid rgba(212,118,106,.2);
-  color:var(--err);border-radius:50%;width:22px;height:22px;
-  cursor:pointer;font-size:.7rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;transition:all .2s var(--ease);
-  -webkit-appearance:none;border:none;font-family:var(--font);
-}
-.img-remove:hover{background:rgba(212,118,106,.25)}
-
 /* ─── Search Inline ─── */
 .search-inline{
   display:none;padding:8px 14px;background:var(--surface);
@@ -839,14 +811,6 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
 .search-item a{color:var(--accent);text-decoration:none;font-size:.72rem}
 .search-item a:hover{text-decoration:underline}
 
-/* ─── Vision Badge ─── */
-.vision-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(123,196,160,.1);border:1px solid rgba(123,196,160,.2);
-  color:var(--ok);font-size:.62rem;font-weight:700;
-  padding:2px 8px;border-radius:99px;
-  text-transform:uppercase;letter-spacing:.05em;
-}
 </style>
 </head>
 <body>
@@ -925,7 +889,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <a class="card" style="cursor:pointer;text-decoration:none;border-color:var(--accent-g2);background:var(--accent-g)" href="chat.html">
         <div style="margin-bottom:10px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <div style="font-family:var(--serif);font-size:1.05rem;color:var(--accent);margin-bottom:6px">Chat IA</div>
-        <div style="font-size:.82rem;color:var(--muted);line-height:1.5">Converse livremente, envie imagens e pesquise na Wikipedia em tempo real.</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.5">Converse livremente e pesquise na Wikipedia em tempo real.</div>
       </a>
     </div>
   </div>
@@ -1083,17 +1047,9 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
               <button class="btn btn-sm" onclick="doSearch()">Buscar</button>
               <button class="btn btn-sm btn-ghost" onclick="toggleSearch()" style="padding:6px 8px">&#10005;</button>
             </div>
-            <div class="img-preview-wrap" id="img-preview">
-              <img id="img-thumb" src="" alt="Preview"/>
-              <span style="font-size:.78rem;color:var(--muted)">Imagem anexada</span>
-              <button class="img-remove" onclick="clearImage()">&#10005;</button>
-            </div>
             <div class="chat-input">
-              <button class="img-upload-btn" onclick="document.getElementById('img-file').click()" title="Enviar imagem">&#128247;</button>
-              <input type="file" id="img-file" accept="image/*" style="display:none" onchange="handleImageUpload(this)"/>
               <textarea id="ci" placeholder="Escreva sua mensagem..."
-                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
-                onpaste="handlePaste(event)"></textarea>
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
               <button class="btn btn-primary btn-sm" id="send-btn" onclick="sendMsg()">Enviar</button>
             </div>
           </div>
@@ -1268,7 +1224,6 @@ const MODEL_NAMES = {
   'mixtral-8x7b-32768': 'Mixtral 8x7B',
   'gemma2-9b-it': 'Gemma 2 9B',
   'llama-3.1-8b-instant': 'Llama 8B',
-  'meta-llama/llama-4-scout-17b-16e-instruct': 'Llama 4 Scout Vision',
 }
 
 /* ── API call with auto-retry + model fallback ── */
@@ -1473,13 +1428,7 @@ NAO comece explicando do zero antes de saber o nivel real do aluno.
 - Use listas quando organizar informacoes
 - Responda SEMPRE em portugues brasileiro coloquial
 
-### 6. QUANDO RECEBER UMA IMAGEM
-- Analise a imagem em detalhe
-- Relacione com o assunto sendo estudado
-- Se for foto de caderno/exercicio, ajude a resolver passo a passo
-- Se for diagrama/grafico, explique o que esta representado
-
-### 7. QUANDO RECEBER CONTEXTO DE PESQUISA WEB
+### 6. QUANDO RECEBER CONTEXTO DE PESQUISA WEB
 - Use as informacoes para enriquecer sua explicacao
 - Cite as fontes quando relevante
 - Traga dados atualizados e exemplos reais
@@ -1521,10 +1470,6 @@ REGRAS OBRIGATORIAS:
 5. Mantenha um fluxo continuo de ensino e avaliacao.
 6. Use analogias do cotidiano brasileiro para explicar conceitos.
 7. Seja encorajador — celebre acertos e trate erros com empatia.
-
-QUANDO RECEBER UMA IMAGEM:
-- Analise a imagem em detalhe e relacione com o assunto
-- Se for exercicio, ajude a resolver e depois faca uma questao similar
 
 FORMATO de questao OBJETIVA (use EXATAMENTE este formato):
 [Q_OBJ]
@@ -1571,7 +1516,6 @@ async function startTutor() {
     busy: false,
     questionCount: 0,
     searchContext: null,
-    pendingImage: null,
   }
   document.getElementById('t-slabel').textContent = subj
   document.getElementById('t-mlabel').textContent = T.level + ' · ' + (modeNames[T.mode] || T.mode)
@@ -1722,7 +1666,7 @@ async function ansDis(taId) {
 async function sendMsg() {
   const inp = document.getElementById('ci')
   const txt = inp.value.trim()
-  if (!txt && !T.pendingImage) return
+  if (!txt) return
   // Se tinha questão pendente, cancela (usuario escolheu digitar livremente)
   if (T.busy) {
     T.busy = false
@@ -1731,18 +1675,8 @@ async function sendMsg() {
     document.querySelectorAll('.dis-area .btn:not(:disabled)').forEach(b => b.disabled = true)
   }
 
-  // Monta mensagem com ou sem imagem
-  if (T.pendingImage) {
-    const content = []
-    if (txt) content.push({ type: 'text', text: txt })
-    content.push({ type: 'image_url', image_url: { url: T.pendingImage } })
-    addBubble('user', (txt || '') + '<br/><span class="vision-badge">Imagem enviada</span>', true)
-    T.messages.push({ role: 'user', content })
-    clearImage()
-  } else {
-    addBubble('user', txt, false)
-    T.messages.push({ role: 'user', content: txt })
-  }
+  addBubble('user', txt, false)
+  T.messages.push({ role: 'user', content: txt })
   inp.value = ''
   await aiTurn(false)
 }
@@ -1753,15 +1687,7 @@ async function aiTurn(isFirst) {
   showTyping()
 
   // Monta payload: historico recente + system prompt via campo dedicado
-  const recent = T.messages.slice(-14)
-  // Strip imagens de mensagens antigas para economizar tokens
-  const payload = recent.map((m, i) => {
-    if (i < recent.length - 4 && Array.isArray(m.content)) {
-      const textParts = m.content.filter(c => c.type === 'text')
-      return { ...m, content: textParts.length ? textParts[0].text : '[imagem enviada anteriormente]' }
-    }
-    return m
-  })
+  const payload = T.messages.slice(-14)
 
   try {
     const resp = await callAI(T.model, payload, { system: buildSys() })
@@ -1778,77 +1704,6 @@ async function aiTurn(isFirst) {
     T.busy = false
   }
   if (sendBtn) sendBtn.disabled = false
-}
-
-/* ══ IMAGE HANDLING ══ */
-function resizeImage(dataUrl, maxSize) {
-  maxSize = maxSize || 1024
-  return new Promise(function(resolve) {
-    var img = new Image()
-    img.onload = function() {
-      var w = img.width, h = img.height
-      if (w <= maxSize && h <= maxSize) { resolve(dataUrl); return }
-      var scale = maxSize / Math.max(w, h)
-      w = Math.round(w * scale); h = Math.round(h * scale)
-      var canvas = document.createElement('canvas')
-      canvas.width = w; canvas.height = h
-      var ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0, w, h)
-      resolve(canvas.toDataURL('image/jpeg', 0.85))
-    }
-    img.src = dataUrl
-  })
-}
-
-function readFileAsDataURL(file) {
-  return new Promise(function(resolve, reject) {
-    var reader = new FileReader()
-    reader.onload = function() { resolve(reader.result) }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
-
-async function processImage(file) {
-  if (!file || !file.type.startsWith('image/')) return
-  if (file.size > 20 * 1024 * 1024) {
-    toast('Imagem muito grande (max 20MB)', 'warn'); return
-  }
-  try {
-    var dataUrl = await readFileAsDataURL(file)
-    var resized = await resizeImage(dataUrl, 1024)
-    T.pendingImage = resized
-    document.getElementById('img-thumb').src = resized
-    document.getElementById('img-preview').classList.add('vis')
-    toast('Imagem anexada', 'ok')
-  } catch(e) {
-    toast('Erro ao processar imagem', 'warn')
-  }
-}
-
-function handleImageUpload(input) {
-  if (input.files && input.files[0]) {
-    processImage(input.files[0])
-  }
-  input.value = '' // reset para permitir re-upload do mesmo arquivo
-}
-
-function handlePaste(event) {
-  var items = (event.clipboardData || {}).items
-  if (!items) return
-  for (var i = 0; i < items.length; i++) {
-    if (items[i].type.indexOf('image') !== -1) {
-      event.preventDefault()
-      processImage(items[i].getAsFile())
-      return
-    }
-  }
-}
-
-function clearImage() {
-  if (T) T.pendingImage = null
-  document.getElementById('img-thumb').src = ''
-  document.getElementById('img-preview').classList.remove('vis')
 }
 
 /* ══ WEB SEARCH ══ */

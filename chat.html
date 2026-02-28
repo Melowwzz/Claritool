@@ -321,27 +321,6 @@ body{
 }
 .badge-think{background:var(--blue-bg);border-color:rgba(123,164,212,.15);color:var(--blue)}
 
-/* Vision badge on user messages with images */
-.vision-tag{
-  display:inline-block;
-  padding:2px 8px;
-  border-radius:4px;
-  background:var(--accent-bg);
-  border:1px solid var(--accent-bg2);
-  color:var(--accent);
-  font-size:.72rem;
-  margin-top:6px;
-}
-
-/* Image thumbnail in user bubble */
-.msg-img{
-  max-width:240px;
-  max-height:180px;
-  border-radius:var(--rs);
-  margin-top:8px;
-  border:1px solid var(--border);
-}
-
 /* Typing indicator */
 .typing{display:flex;gap:5px;padding:8px 0;align-items:center}
 .typing span{
@@ -464,38 +443,6 @@ body{
   color:var(--dim);
 }
 
-/* Image preview bar */
-.img-bar{
-  display:none;
-  align-items:center;
-  gap:10px;
-  padding:8px 12px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--rs);
-  margin-bottom:10px;
-}
-.img-bar.show{display:flex}
-.img-bar img{
-  width:48px;height:48px;
-  object-fit:cover;
-  border-radius:6px;
-  border:1px solid var(--border2);
-}
-.img-bar span{font-size:.78rem;color:var(--muted);flex:1}
-.img-bar .remove{
-  width:24px;height:24px;
-  border:none;
-  background:var(--surface3);
-  border-radius:50%;
-  color:var(--muted);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.85rem;
-  transition:all .15s;
-}
-.img-bar .remove:hover{background:var(--red);color:var(--white)}
-
 /* Search bar */
 .search-bar{
   display:none;
@@ -590,8 +537,6 @@ body{
 .compose-btn.send:hover{background:var(--accent);color:var(--bg)}
 .compose-btn.send:disabled{background:var(--surface3);color:var(--dim)}
 
-input[type=file]{display:none}
-
 /* ─── Toast ─── */
 .toast-wrap{
   position:fixed;
@@ -656,7 +601,7 @@ input[type=file]{display:none}
     <div class="welcome" id="welcome">
       <div class="welcome-icon"></div>
       <h2>Oi! Sou a Clara.</h2>
-      <p>Sua assistente de estudos com IA. Me manda sua duvida, uma foto do caderno ou pesquise direto na Wikipedia.</p>
+      <p>Sua assistente de estudos com IA. Me manda sua duvida ou pesquise direto na Wikipedia.</p>
       <div class="welcome-chips">
         <div class="welcome-chip" onclick="quickStart('Me explica fotossintese de um jeito simples')">Fotossintese simples</div>
         <div class="welcome-chip" onclick="quickStart('Quais foram as causas da Segunda Guerra Mundial?')">Causas da 2a Guerra</div>
@@ -680,13 +625,6 @@ input[type=file]{display:none}
       </div>
     </div>
 
-    <!-- Image preview -->
-    <div class="img-bar" id="img-bar">
-      <img id="img-thumb" src="" alt=""/>
-      <span>Imagem anexada</span>
-      <button class="remove" onclick="clearImage()">&#10005;</button>
-    </div>
-
     <!-- Search bar -->
     <div class="search-bar" id="search-bar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--muted)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -697,17 +635,12 @@ input[type=file]{display:none}
 
     <!-- Compose -->
     <div class="compose">
-      <button class="compose-btn" onclick="document.getElementById('file-input').click()" title="Enviar imagem">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </button>
-      <input type="file" id="file-input" accept="image/*" onchange="handleFile(this)"/>
       <button class="compose-btn" onclick="toggleSearch()" title="Pesquisar na Wikipedia">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
       <textarea id="input" rows="1" placeholder="Pergunte qualquer coisa..."
         onkeydown="handleKey(event)"
-        oninput="autoGrow(this)"
-        onpaste="handlePaste(event)"></textarea>
+        oninput="autoGrow(this)"></textarea>
       <button class="compose-btn send" id="send-btn" onclick="send()" title="Enviar">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
@@ -729,7 +662,6 @@ const API = (location.hostname === 'localhost' || location.hostname === '127.0.0
 /* ── State ── */
 let chatHistory = []
 let currentMode = 'quick'
-let pendingImage = null
 let searchContext = null
 let isBusy = false
 
@@ -757,13 +689,6 @@ const SYSTEM = `Voce e a Clara, uma assistente de aprendizado excepcional. Voce 
 - Use blocos de codigo quando mostrar codigo
 - NUNCA mande blocos enormes de texto — quebre em partes digeríveis
 - Use titulos (##, ###) para organizar respostas longas
-
-## QUANDO RECEBER IMAGENS
-- Analise a imagem em detalhe
-- Se for foto de caderno/exercicio: ajude a resolver passo a passo
-- Se for diagrama/grafico: explique o que esta representado
-- Se for screenshot de codigo: analise, encontre erros, sugira melhorias
-- Sempre relacione a imagem com o contexto da conversa
 
 ## QUANDO RECEBER CONTEXTO DE PESQUISA WEB
 - Use os dados para enriquecer sua resposta com informacoes atualizadas
@@ -853,17 +778,11 @@ function hideWelcome() {
   if (w) w.remove()
 }
 
-function addUserMsg(text, imgSrc) {
+function addUserMsg(text) {
   hideWelcome()
   var div = document.createElement('div')
   div.className = 'msg msg-user'
-  var html = '<div class="bubble">' + escHtml(text)
-  if (imgSrc) {
-    html += '<br/><img class="msg-img" src="' + imgSrc + '" alt="Imagem enviada"/>'
-    html += '<br/><span class="vision-tag">Imagem enviada</span>'
-  }
-  html += '</div>'
-  div.innerHTML = html
+  div.innerHTML = '<div class="bubble">' + escHtml(text) + '</div>'
   msgsEl.appendChild(div)
   scrollBottom()
 }
@@ -963,71 +882,6 @@ function addSearchResults(query, data) {
   scrollBottom()
 }
 
-/* ── Image Handling ── */
-function resizeImg(dataUrl, maxSize) {
-  return new Promise(function(resolve) {
-    var img = new Image()
-    img.onload = function() {
-      var w = img.width, h = img.height
-      if (w <= maxSize && h <= maxSize) { resolve(dataUrl); return }
-      var scale = maxSize / Math.max(w, h)
-      w = Math.round(w * scale); h = Math.round(h * scale)
-      var c = document.createElement('canvas')
-      c.width = w; c.height = h
-      c.getContext('2d').drawImage(img, 0, 0, w, h)
-      resolve(c.toDataURL('image/jpeg', 0.85))
-    }
-    img.src = dataUrl
-  })
-}
-
-function readFile(file) {
-  return new Promise(function(resolve, reject) {
-    var r = new FileReader()
-    r.onload = function() { resolve(r.result) }
-    r.onerror = reject
-    r.readAsDataURL(file)
-  })
-}
-
-async function processImage(file) {
-  if (!file || !file.type.startsWith('image/')) return
-  if (file.size > 20 * 1024 * 1024) { toast('Imagem muito grande (max 20MB)', 'warn'); return }
-  try {
-    var dataUrl = await readFile(file)
-    var resized = await resizeImg(dataUrl, 1024)
-    pendingImage = resized
-    document.getElementById('img-thumb').src = resized
-    document.getElementById('img-bar').classList.add('show')
-    toast('Imagem anexada', 'ok')
-  } catch(e) {
-    toast('Erro ao processar imagem', 'warn')
-  }
-}
-
-function clearImage() {
-  pendingImage = null
-  document.getElementById('img-thumb').src = ''
-  document.getElementById('img-bar').classList.remove('show')
-}
-
-function handleFile(input) {
-  if (input.files && input.files[0]) processImage(input.files[0])
-  input.value = ''
-}
-
-function handlePaste(event) {
-  var items = (event.clipboardData || {}).items
-  if (!items) return
-  for (var i = 0; i < items.length; i++) {
-    if (items[i].type.indexOf('image') !== -1) {
-      event.preventDefault()
-      processImage(items[i].getAsFile())
-      return
-    }
-  }
-}
-
 /* ── Search ── */
 function toggleSearch() {
   var bar = document.getElementById('search-bar')
@@ -1076,38 +930,20 @@ function handleKey(event) {
 
 async function send() {
   var text = inputEl.value.trim()
-  if ((!text && !pendingImage) || isBusy) return
+  if (!text || isBusy) return
 
   isBusy = true
   document.getElementById('send-btn').disabled = true
 
   // Show user message
-  addUserMsg(text || '(imagem)', pendingImage || null)
+  addUserMsg(text)
 
-  // Build message content
-  var content
-  if (pendingImage) {
-    content = []
-    if (text) content.push({ type: 'text', text: text })
-    content.push({ type: 'image_url', image_url: { url: pendingImage } })
-    clearImage()
-  } else {
-    content = text
-  }
-
-  chatHistory.push({ role: 'user', content: content })
+  chatHistory.push({ role: 'user', content: text })
   inputEl.value = ''
   inputEl.style.height = 'auto'
 
-  // Prepare payload — strip images from old messages to save tokens
-  var recent = chatHistory.slice(-16)
-  var payload = recent.map(function(m, i) {
-    if (i < recent.length - 4 && Array.isArray(m.content)) {
-      var textParts = m.content.filter(function(c) { return c.type === 'text' })
-      return { role: m.role, content: textParts.length ? textParts[0].text : '[imagem]' }
-    }
-    return m
-  })
+  // Prepare payload
+  var payload = chatHistory.slice(-16)
 
   // Show typing indicator
   showTyping()
@@ -1169,14 +1005,12 @@ function quickStart(text) {
 function clearChat() {
   chatHistory = []
   searchContext = null
-  pendingImage = null
-  clearImage()
   msgsEl.innerHTML = ''
   // Rebuild welcome
   var w = document.createElement('div')
   w.className = 'welcome'
   w.id = 'welcome'
-  w.innerHTML = '<div class="welcome-icon"></div><h2>Oi! Sou a Clara.</h2><p>Sua assistente de estudos com IA. Me manda sua duvida, uma foto do caderno ou pesquise direto na Wikipedia.</p><div class="welcome-chips"><div class="welcome-chip" onclick="quickStart(\'Me explica fotossintese de um jeito simples\')">Fotossintese simples</div><div class="welcome-chip" onclick="quickStart(\'Quais foram as causas da Segunda Guerra Mundial?\')">Causas da 2a Guerra</div><div class="welcome-chip" onclick="quickStart(\'Me ensina Python do zero\')">Python do zero</div><div class="welcome-chip" onclick="quickStart(\'Como funciona a gravidade?\')">Como funciona gravidade</div><div class="welcome-chip" onclick="quickStart(\'Me ajuda a entender fracoes\')">Entender fracoes</div></div>'
+  w.innerHTML = '<div class="welcome-icon"></div><h2>Oi! Sou a Clara.</h2><p>Sua assistente de estudos com IA. Me manda sua duvida ou pesquise direto na Wikipedia.</p><div class="welcome-chips"><div class="welcome-chip" onclick="quickStart(\'Me explica fotossintese de um jeito simples\')">Fotossintese simples</div><div class="welcome-chip" onclick="quickStart(\'Quais foram as causas da Segunda Guerra Mundial?\')">Causas da 2a Guerra</div><div class="welcome-chip" onclick="quickStart(\'Me ensina Python do zero\')">Python do zero</div><div class="welcome-chip" onclick="quickStart(\'Como funciona a gravidade?\')">Como funciona gravidade</div><div class="welcome-chip" onclick="quickStart(\'Me ajuda a entender fracoes\')">Entender fracoes</div></div>'
   msgsEl.appendChild(w)
 }
 </script>

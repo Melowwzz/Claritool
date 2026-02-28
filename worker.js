@@ -1,6 +1,6 @@
 /**
  * Claritool — Cloudflare Worker
- * Chat endpoint with think-more refinement, vision routing, web search
+ * Chat endpoint with think-more refinement, web search
  */
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
@@ -13,17 +13,12 @@ const TEXT_MODELS = [
   'mixtral-8x7b-32768',
 ]
 
-const VISION_MODELS = [
-  'meta-llama/llama-4-scout-17b-16e-instruct',
-]
-
 const MODEL_NAMES = {
   'llama-3.3-70b-versatile':      'Llama 3.3 70B',
   'llama-3.1-70b-versatile':      'Llama 3.1 70B',
   'gemma2-9b-it':                 'Gemma 2 9B',
   'llama-3.1-8b-instant':         'Llama 8B',
   'mixtral-8x7b-32768':           'Mixtral 8x7B',
-  'meta-llama/llama-4-scout-17b-16e-instruct': 'Llama 4 Scout Vision',
 }
 
 const CORS = {
@@ -89,13 +84,6 @@ function json(data, status = 200) {
     status,
     headers: { 'Content-Type': 'application/json', ...CORS },
   })
-}
-
-function hasImages(messages) {
-  return messages.some(m =>
-    Array.isArray(m.content) &&
-    m.content.some(c => c.type === 'image_url')
-  )
 }
 
 async function callGroq(apiKey, model, messages, temperature = 0.7, maxTokens = 4096) {
@@ -318,12 +306,9 @@ export default {
         ? [{ role: 'system', content: sysContent }, ...messages]
         : messages
 
-      const isVision = hasImages(messages)
-      const pool = isVision ? VISION_MODELS : TEXT_MODELS
-
       try {
         // First response
-        let { result, usedModel, usedModelName } = await tryModels(apiKey, pool, sysMsgs, 0.7, 4096)
+        let { result, usedModel, usedModelName } = await tryModels(apiKey, TEXT_MODELS, sysMsgs, 0.7, 4096)
 
         // "Think more" refinement loop (3 passes)
         if (mode === 'think') {
@@ -350,13 +335,12 @@ export default {
         const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
         const preview = typeof lastUserMsg?.content === 'string'
           ? lastUserMsg.content.slice(0, 300)
-          : Array.isArray(lastUserMsg?.content) ? '[imagem]' : '???'
+          : '???'
         ctx.waitUntil(logActivity(env.LOGS, {
           time: new Date().toISOString(),
           endpoint: '/api/chat',
           mode: mode || 'quick',
           model: usedModelName,
-          vision: isVision,
           query: preview,
         }))
 
@@ -385,11 +369,9 @@ export default {
         return json({ error: 'API key not configured' }, 500)
       }
 
-      const isVision = hasImages(messages)
-      const pool = isVision ? VISION_MODELS : TEXT_MODELS
       const modelsToTry = model
-        ? [model, ...pool.filter(m => m !== model)]
-        : pool
+        ? [model, ...TEXT_MODELS.filter(m => m !== model)]
+        : TEXT_MODELS
 
       const sysMsgs = system
         ? [{ role: 'system', content: system }, ...messages]
@@ -402,13 +384,12 @@ export default {
         const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
         const preview = typeof lastUserMsg?.content === 'string'
           ? lastUserMsg.content.slice(0, 300)
-          : Array.isArray(lastUserMsg?.content) ? '[imagem]' : '???'
+          : '???'
         ctx.waitUntil(logActivity(env.LOGS, {
           time: new Date().toISOString(),
           endpoint: '/',
           mode: 'legacy',
           model: usedModelName,
-          vision: hasImages(messages),
           query: preview,
         }))
 

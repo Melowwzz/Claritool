@@ -26,7 +26,7 @@ Plataforma educacional serverless com IA para estudantes brasileiros. Combina si
 │                                                              │
 │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐ │
 │  │  Groq API   │  │ DuckDuckGo   │  │ Wikipedia REST API  │ │
-│  │  (LLM/VLM)  │  │ (search)     │  │ (pt-BR + en)        │ │
+│  │  (LLM)      │  │ (search)     │  │ (pt-BR + en)        │ │
 │  └─────────────┘  └──────────────┘  └─────────────────────┘ │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -37,7 +37,7 @@ Plataforma educacional serverless com IA para estudantes brasileiros. Combina si
 
 | Rota | Método | Descrição | Payload |
 |------|--------|-----------|---------|
-| `POST /api/chat` | POST | Chat principal com seleção de modelo, refinamento e visão | `{ messages, system?, mode?, searchContext? }` |
+| `POST /api/chat` | POST | Chat principal com seleção de modelo e refinamento | `{ messages, system?, mode?, searchContext? }` |
 | `POST /api/search` | POST | Busca web (DuckDuckGo + Wikipedia) | `{ query }` |
 | `POST /search` | POST | Endpoint legado de busca | `{ query }` |
 | `GET /chat` | GET | Redirect → `chat.html` | — |
@@ -67,15 +67,6 @@ Plataforma educacional serverless com IA para estudantes brasileiros. Combina si
 | `gemma2-9b-it` | 9B | Fallback #2 |
 | `llama-3.1-8b-instant` | 8B | Fallback #3 (rápido) |
 | `mixtral-8x7b-32768` | 8x7B | Fallback #4 (contexto 32k) |
-
-### Vision Models (fallback sequencial)
-
-| Modelo | Params | Uso |
-|--------|--------|-----|
-| `llama-3.2-90b-vision-preview` | 90B | Primário |
-| `llama-3.2-11b-vision-preview` | 11B | Fallback |
-
-O roteamento é automático: se `messages[]` contém `content[].type === "image_url"`, o worker usa o pool de visão. Caso contrário, usa o pool de texto.
 
 ---
 
@@ -107,10 +98,6 @@ R₂ + REFINE_INSTRUCTION → Modelo → Resposta R₃  (temp: 0.5)
 2. **Wikipedia REST API** (`pt.wikipedia.org`) → resumo da página
 3. **Fallback**: `en.wikipedia.org` se PT não retornar resultado
 4. Contexto formatado e injetado no system prompt como `## CONTEXTO DE PESQUISA WEB`
-
-### Vision Routing
-
-Detecção automática de imagens no array `messages.content[]`. Se qualquer mensagem contém `{ type: "image_url" }`, o request é roteado para `VISION_MODELS` ao invés de `TEXT_MODELS`.
 
 ### Client-Side Throttling
 
@@ -172,7 +159,6 @@ D) opção
 **Pontuação:** +10 (objetiva correta) · +5 (dissertativa submetida)
 
 **Features adicionais:**
-- Upload de imagens (fotos de caderno, diagramas, screenshots de código)
 - Busca web contextual via toggle
 - Quick actions: "Explica melhor", "Exemplo prático", "Resumo", "Próximo tópico"
 - Base de recursos embutida (~50 links) mapeada por keyword (fotossíntese, Python, física, etc.)
@@ -189,9 +175,6 @@ Chat conversacional sem estrutura de aula.
 | Think | 1 + 3 refinamentos | 0.5 | ~12-18s |
 
 **Features:**
-- Suporte a imagens (upload + paste de clipboard)
-- Resize automático: max 1024px, JPEG quality 0.85, limit 20MB
-- Imagens removidas do histórico após 4 turnos (economia de tokens)
 - Busca web integrada (DuckDuckGo + Wikipedia)
 - Markdown rendering custom (code blocks, headers, listas, bold/italic, blockquotes, links)
 - Auto-grow textarea
@@ -208,7 +191,6 @@ Chat conversacional sem estrutura de aula.
 | HTML5 + CSS3 + Vanilla JS (ES6+) | Sem frameworks, sem build step |
 | CSS Custom Properties | Sistema de temas (dark/mid/light) |
 | Google Fonts | Figtree, Instrument Serif, Inter, JetBrains Mono |
-| Canvas API | Resize de imagens antes do upload |
 | LocalStorage | Persistência de tema |
 
 ### Backend
@@ -216,7 +198,7 @@ Chat conversacional sem estrutura de aula.
 | Serviço | Função |
 |---------|--------|
 | Cloudflare Workers | Runtime serverless (V8 isolate) |
-| Groq API | Inferência LLM/VLM (OpenAI-compatible) |
+| Groq API | Inferência LLM (OpenAI-compatible) |
 | DuckDuckGo Instant Answer API | Busca web sem API key |
 | Wikipedia REST API | Conteúdo factual (pt-BR + en fallback) |
 
@@ -263,7 +245,7 @@ Claritool/
 ├── worker.js          # Cloudflare Worker — API proxy, model fallback, search, refinement
 ├── wrangler.toml      # Configuração do Wrangler (entry point, compatibility date)
 ├── index.html         # App principal — Simplificar, Roteiro, Tutor IA
-├── chat.html          # Chat livre — Quick/Think mode, search, vision
+├── chat.html          # Chat livre — Quick/Think mode, search
 └── .gitignore         # Exclui .wrangler/
 ```
 
@@ -273,7 +255,7 @@ Claritool/
 
 - **API key** armazenada como Cloudflare Secret (nunca exposta no frontend)
 - **CORS** aberto (`*`) — adequado para ferramenta educacional pública
-- **Validação de input**: limite de caracteres (15k), tamanho de imagem (20MB), pool fixo de modelos
+- **Validação de input**: limite de caracteres (15k), pool fixo de modelos
 - **Sem dados persistentes**: histórico vive apenas na sessão do browser (in-memory)
 
 ---
