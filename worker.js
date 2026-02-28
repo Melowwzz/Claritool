@@ -14,8 +14,7 @@ const TEXT_MODELS = [
 ]
 
 const VISION_MODELS = [
-  'llama-3.2-90b-vision-preview',
-  'llama-3.2-11b-vision-preview',
+  'meta-llama/llama-4-scout-17b-16e-instruct',
 ]
 
 const MODEL_NAMES = {
@@ -24,8 +23,7 @@ const MODEL_NAMES = {
   'gemma2-9b-it':                 'Gemma 2 9B',
   'llama-3.1-8b-instant':         'Llama 8B',
   'mixtral-8x7b-32768':           'Mixtral 8x7B',
-  'llama-3.2-90b-vision-preview': 'Llama 3.2 90B Vision',
-  'llama-3.2-11b-vision-preview': 'Llama 3.2 11B Vision',
+  'meta-llama/llama-4-scout-17b-16e-instruct': 'Llama 4 Scout Vision',
 }
 
 const CORS = {
