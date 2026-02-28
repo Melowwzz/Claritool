@@ -4,3 +4,12 @@ compatibility_date = "2024-01-01"
 
 # A chave GROQ_API_KEY deve ser adicionada como secret via:
 # npx wrangler secret put GROQ_API_KEY
+
+# A chave MONITOR_SECRET deve ser adicionada como secret via:
+# npx wrangler secret put MONITOR_SECRET
+
+[[kv_namespaces]]
+binding = "LOGS"
+id = "PLACEHOLDER_ID"
+# Crie o namespace com: npx wrangler kv namespace create LOGS
+# Depois substitua PLACEHOLDER_ID pelo ID retornado
