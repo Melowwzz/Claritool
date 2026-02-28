@@ -31,7 +31,35 @@ const MODEL_NAMES = {
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
+const MAX_LOGS = 200
+
+// ── Activity Logger (KV-backed) ──
+async function logActivity(kv, entry) {
+  if (!kv) return
+  try {
+    const raw = await kv.get('activity_log')
+    const logs = raw ? JSON.parse(raw) : []
+    logs.unshift(entry)
+    if (logs.length > MAX_LOGS) logs.length = MAX_LOGS
+    await kv.put('activity_log', JSON.stringify(logs))
+  } catch {}
+}
+
+async function getStats(kv) {
+  if (!kv) return { total: 0, today: 0, logs: [] }
+  try {
+    const raw = await kv.get('activity_log')
+    const logs = raw ? JSON.parse(raw) : []
+    const now = new Date()
+    const todayStr = now.toISOString().slice(0, 10)
+    const today = logs.filter(l => l.time.startsWith(todayStr)).length
+    return { total: logs.length, today, logs }
+  } catch {
+    return { total: 0, today: 0, logs: [] }
+  }
 }
 
 const REFINE_INSTRUCTION = `Reescreva completamente sua resposta anterior de forma melhorada:
@@ -208,12 +236,27 @@ function formatSearchContext(data) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: CORS })
     }
 
     const url = new URL(request.url)
+
+    // ── Monitor endpoint (secret) ──
+    if (url.pathname === '/api/logs' && request.method === 'GET') {
+      const secret = env.MONITOR_SECRET
+      const auth = url.searchParams.get('key') || request.headers.get('Authorization')?.replace('Bearer ', '')
+      if (!secret || auth !== secret) {
+        return json({ error: 'Unauthorized' }, 401)
+      }
+      const since = url.searchParams.get('since') || null
+      const stats = await getStats(env.LOGS)
+      if (since) {
+        stats.logs = stats.logs.filter(l => l.time > since)
+      }
+      return json(stats)
+    }
 
     // ── Serve chat.html ──
     if (url.pathname === '/chat' && request.method === 'GET') {
@@ -305,6 +348,20 @@ export default {
           }
         }
 
+        // Log activity (fire-and-forget)
+        const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
+        const preview = typeof lastUserMsg?.content === 'string'
+          ? lastUserMsg.content.slice(0, 300)
+          : Array.isArray(lastUserMsg?.content) ? '[imagem]' : '???'
+        ctx.waitUntil(logActivity(env.LOGS, {
+          time: new Date().toISOString(),
+          endpoint: '/api/chat',
+          mode: mode || 'quick',
+          model: usedModelName,
+          vision: isVision,
+          query: preview,
+        }))
+
         return json({ result, usedModel, usedModelName, mode: mode || 'quick' })
       } catch (e) {
         return json({ error: e.message }, 429)
@@ -342,6 +399,21 @@ export default {
 
       try {
         const { result, usedModel, usedModelName } = await tryModels(apiKey, modelsToTry, sysMsgs)
+
+        // Log activity (fire-and-forget)
+        const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
+        const preview = typeof lastUserMsg?.content === 'string'
+          ? lastUserMsg.content.slice(0, 300)
+          : Array.isArray(lastUserMsg?.content) ? '[imagem]' : '???'
+        ctx.waitUntil(logActivity(env.LOGS, {
+          time: new Date().toISOString(),
+          endpoint: '/',
+          mode: 'legacy',
+          model: usedModelName,
+          vision: hasImages(messages),
+          query: preview,
+        }))
+
         return json({ result, usedModel, usedModelName })
       } catch (e) {
         return json({ error: e.message }, 429)
