@@ -828,7 +828,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
 </head>
 <body>
 
-<div class="beta-banner">Este site esta em fase beta e ainda nao foi lancado oficialmente. Podem ocorrer instabilidades e quedas temporarias.</div>
+<div class="beta-banner">Este site está em fase beta e ainda não foi lançado oficialmente. Podem ocorrer instabilidades e quedas temporárias.</div>
 
 <!-- Ambient Background -->
 <div class="scene">
@@ -863,7 +863,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <div class="theme-dot" data-t="light" onclick="setTheme('light')"></div>
     </div>
     <nav class="nav" role="tablist">
-      <button class="tab-btn active" data-tab="home">Inicio</button>
+      <button class="tab-btn active" data-tab="home">Início</button>
       <button class="tab-btn" data-tab="simplify">Simplificar</button>
       <button class="tab-btn" data-tab="roadmap">Roteiro</button>
       <button class="tab-btn" data-tab="tutor">Tutor IA</button>
@@ -881,7 +881,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       </h1>
       <p class="hero-sub">
         Simplifique textos complexos, crie roteiros de estudo personalizados
-        e pratique com um tutor inteligente que se adapta a voce.
+        e pratique com um tutor inteligente que se adapta a você.
       </p>
     </div>
 
@@ -899,7 +899,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
       <div class="card" style="cursor:pointer" onclick="switchTab('tutor')">
         <div style="font-size:1.4rem;margin-bottom:10px">&#9733;</div>
         <div style="font-family:var(--serif);font-size:1.05rem;color:var(--white);margin-bottom:6px">Tutor IA</div>
-        <div style="font-size:.82rem;color:var(--muted);line-height:1.5">Aprenda no seu ritmo com explicacoes e questoes adaptativas.</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.5">Aprenda no seu ritmo com explicações e questões adaptativas.</div>
       </div>
       <a class="card" style="cursor:pointer;text-decoration:none;border-color:var(--accent-g2);background:var(--accent-g)" href="chat.html">
         <div style="margin-bottom:10px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
@@ -913,7 +913,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
   <div id="tab-simplify" class="tab-content">
     <div class="page-title">
       <h2>Simplificar texto</h2>
-      <p>Cole qualquer texto complexo e receba uma versao clara e acessivel.</p>
+      <p>Cole qualquer texto complexo e receba uma versão clara e acessível.</p>
     </div>
     <div class="card">
       <div class="field">
@@ -940,16 +940,16 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
     </div>
     <div class="card">
       <div class="field">
-        <label class="label">O que voce quer aprender?</label>
+        <label class="label">O que você quer aprender?</label>
         <textarea id="rm-goal" rows="3" placeholder="Ex: Python do zero para analise de dados..."></textarea>
       </div>
       <div class="field">
-        <label class="label">Prazo disponivel</label>
+        <label class="label">Prazo disponível</label>
         <input type="text" id="rm-time" placeholder="Ex: 2 semanas, 1 mes..."/>
       </div>
       <div class="field">
         <label class="label">Contexto adicional <span class="label-hint">(opcional)</span></label>
-        <textarea id="rm-ctx" rows="2" placeholder="Ex: Estudo 1h por dia, ja sei Excel basico..."></textarea>
+        <textarea id="rm-ctx" rows="2" placeholder="Ex: Estudo 1h por dia, já sei Excel básico..."></textarea>
       </div>
       <button class="btn btn-primary" id="rm-btn" onclick="runRoadmap()" style="width:100%">Gerar roteiro</button>
     </div>
@@ -964,13 +964,13 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
   <div id="tab-tutor" class="tab-content">
     <div class="page-title">
       <h2>Tutor IA</h2>
-      <p>Aprendizado guiado com explicacoes, questoes objetivas e dissertativas.</p>
+      <p>Aprendizado guiado com explicações, questões objetivas e dissertativas.</p>
     </div>
 
     <!-- Setup -->
     <div id="tutor-setup">
       <div class="setup-card">
-        <h3>Configurar sessao</h3>
+        <h3>Configurar sessão</h3>
         <p>Configure em segundos — a IA se adapta ao seu perfil automaticamente.</p>
 
         <div class="field">
@@ -983,14 +983,14 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
           <div class="level-grid" id="lg">
             <div class="level-card" data-l="Iniciante" onclick="pickL(this)">
               <div class="level-label">Iniciante</div>
-              <div class="level-sub">Sem base previa</div>
+              <div class="level-sub">Sem base prévia</div>
             </div>
             <div class="level-card sel" data-l="Intermediario" onclick="pickL(this)">
-              <div class="level-label">Intermediario</div>
-              <div class="level-sub">Ja tenho nocao</div>
+              <div class="level-label">Intermediário</div>
+              <div class="level-sub">Já tenho noção</div>
             </div>
             <div class="level-card" data-l="Avancado" onclick="pickL(this)">
-              <div class="level-label">Avancado</div>
+              <div class="level-label">Avançado</div>
               <div class="level-sub">Quero aprofundar</div>
             </div>
           </div>
@@ -1001,21 +1001,21 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
           <div class="mode-grid" id="mog" style="grid-template-columns:repeat(3,1fr)">
             <div class="mode-card sel" data-mo="aprendizado" onclick="pickMo(this)">
               <div class="mode-name">Modo Aprendizado</div>
-              <div class="mode-desc">Ensino progressivo com metodo socratico e conversa livre</div>
+              <div class="mode-desc">Ensino progressivo com método socrático e conversa livre</div>
             </div>
             <div class="mode-card" data-mo="explicacao" onclick="pickMo(this)">
-              <div class="mode-name">Explicacao + Pratica</div>
-              <div class="mode-desc">A IA explica e propoe questoes intercaladas</div>
+              <div class="mode-name">Explicação + Prática</div>
+              <div class="mode-desc">A IA explica e propõe questões intercaladas</div>
             </div>
             <div class="mode-card" data-mo="questoes" onclick="pickMo(this)">
               <div class="mode-name">Modo Prova</div>
-              <div class="mode-desc">So questoes com feedback direto</div>
+              <div class="mode-desc">Só questões com feedback direto</div>
             </div>
           </div>
         </div>
 
         <div class="field" id="qt-section" style="display:none">
-          <label class="label">Tipo de questao</label>
+          <label class="label">Tipo de questão</label>
           <div class="mode-grid" id="qtg">
             <div class="mode-card sel" data-qt="mista" onclick="pickQt(this)">
               <div class="mode-name">Mista</div>
@@ -1029,7 +1029,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
         </div>
 
         <div id="setup-err" class="errbox"></div>
-        <button class="btn btn-primary" style="width:100%" onclick="startTutor()">Iniciar sessao</button>
+        <button class="btn btn-primary" style="width:100%" onclick="startTutor()">Iniciar sessão</button>
       </div>
     </div>
 
@@ -1051,9 +1051,9 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
             <div class="messages" id="msgs"></div>
             <div class="quick-actions" id="qa">
               <button class="qa-btn" onclick="qaAction('explain')">Explica melhor</button>
-              <button class="qa-btn" onclick="qaAction('example')">Exemplo pratico</button>
+              <button class="qa-btn" onclick="qaAction('example')">Exemplo prático</button>
               <button class="qa-btn" onclick="qaAction('summary')">Resumo</button>
-              <button class="qa-btn" onclick="qaAction('next')">Proximo topico</button>
+              <button class="qa-btn" onclick="qaAction('next')">Próximo tópico</button>
               <button class="qa-btn" onclick="toggleSearch()">&#128269; Pesquisar</button>
             </div>
             <div class="search-inline" id="search-bar">
@@ -1070,7 +1070,7 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
           </div>
         </div>
         <aside class="sources">
-          <h4>Referencias</h4>
+          <h4>Referências</h4>
           <ul class="source-list" id="sl"></ul>
           <div id="se" class="source-empty">Aparece conforme o assunto.</div>
         </aside>
@@ -1094,8 +1094,8 @@ textarea::placeholder,input::placeholder{color:var(--dim)}
   const phrases = [
     'aprender com clareza',
     'entender o que importa',
-    'praticar sem pressao',
-    'estudar com inteligencia',
+    'praticar sem pressão',
+    'estudar com inteligência',
     'simplificar o complexo',
     'criar seu proprio ritmo'
   ]
@@ -1267,7 +1267,7 @@ async function callAI(model, messages, opts = {}) {
   } catch (networkErr) {
     if (_attempt < MAX_RETRIES) {
       const delay = Math.min(_attempt * 3000, 15000)
-      toast(`Erro de conexão. Tentando em ${Math.round(delay/1000)}s...`)
+      toast(`Erro de conexão. Tentando em ${Math.round(delay/1000)}s…`)
       await new Promise(ok => setTimeout(ok, delay))
       return callAI(model, messages, { system, _attempt: _attempt + 1, _triedModels })
     }
@@ -1314,7 +1314,7 @@ async function runSimplify() {
   try {
     const r = await callAI(getM(), [{
       role: 'user',
-      content: `Voce e especialista em comunicacao clara. Simplifique o texto abaixo para que qualquer pessoa entenda, sem conhecimento tecnico. Use frases curtas, substitua termos dificeis por equivalentes simples, e destaque os pontos principais ao final com um breve resumo.\n\nTexto:\n${text}\n\nResponda em portugues brasileiro.`
+      content: `Você é especialista em comunicação clara. Simplifique o texto abaixo para que qualquer pessoa entenda, sem conhecimento técnico. Use frases curtas, substitua termos difíceis por equivalentes simples, e destaque os pontos principais ao final com um breve resumo.\n\nTexto:\n${text}\n\nResponda em português brasileiro.`
     }])
     document.getElementById('sg-body').innerHTML = md(r)
     document.getElementById('sg-res').classList.add('vis')
@@ -1333,14 +1333,14 @@ async function runRoadmap() {
   const ctx  = document.getElementById('rm-ctx').value.trim()
   const errEl = document.getElementById('rm-err')
   errEl.classList.remove('vis')
-  if (!goal) { errEl.textContent = 'Descreva o que voce quer aprender.'; errEl.classList.add('vis'); return }
-  if (!time) { errEl.textContent = 'Informe o prazo disponivel.'; errEl.classList.add('vis'); return }
+  if (!goal) { errEl.textContent = 'Descreva o que você quer aprender.'; errEl.classList.add('vis'); return }
+  if (!time) { errEl.textContent = 'Informe o prazo disponível.'; errEl.classList.add('vis'); return }
   setBtn('rm-btn', true, 'Gerando...')
   document.getElementById('rm-res').classList.remove('vis')
   try {
     const r = await callAI(getM(), [{
       role: 'user',
-      content: `Voce e pedagogo especialista em aprendizagem acelerada. Crie um roteiro de estudos detalhado, realista e motivador.\n\nObjetivo: ${goal}\nPrazo: ${time}${ctx ? '\nContexto: ' + ctx : ''}\n\nEstruture com fases claras, inclua recursos gratuitos (YouTube, sites, livros), e adicione dicas praticas. Responda em portugues brasileiro.`
+      content: `Você é pedagogo especialista em aprendizagem acelerada. Crie um roteiro de estudos detalhado, realista e motivador.\n\nObjetivo: ${goal}\nPrazo: ${time}${ctx ? '\nContexto: ' + ctx : ''}\n\nEstruture com fases claras, inclua recursos gratuitos (YouTube, sites, livros), e adicione dicas práticas. Responda em português brasileiro.`
     }])
     document.getElementById('rm-body').innerHTML = md(r)
     document.getElementById('rm-res').classList.add('vis')
@@ -1355,30 +1355,30 @@ async function runRoadmap() {
 /* ══ FONTES ══ */
 const SOURCES = [
   { kw: ['fotossintese','fotossíntese','cloroplasto'], links: [
-    { n: 'Khan Academy — Fotossintese', u: 'https://pt.khanacademy.org/science/ap-biology/cellular-energetics' },
-    { n: 'Wikipedia — Fotossintese', u: 'https://pt.wikipedia.org/wiki/Fotoss%C3%ADntese' },
-    { n: 'So Biologia', u: 'https://www.sobiologia.com.br' }]},
+    { n: 'Khan Academy — Fotossíntese', u: 'https://pt.khanacademy.org/science/ap-biology/cellular-energetics' },
+    { n: 'Wikipedia — Fotossíntese', u: 'https://pt.wikipedia.org/wiki/Fotoss%C3%ADntese' },
+    { n: 'Só Biologia', u: 'https://www.sobiologia.com.br' }]},
   { kw: ['segunda guerra','nazismo','hitler'], links: [
-    { n: 'Khan Academy — Historia', u: 'https://pt.khanacademy.org/humanities/world-history' },
-    { n: 'Brasil Escola — 2a GM', u: 'https://brasilescola.uol.com.br/historiag/segunda-guerra-mundial.htm' }]},
+    { n: 'Khan Academy — História', u: 'https://pt.khanacademy.org/humanities/world-history' },
+    { n: 'Brasil Escola — 2ª GM', u: 'https://brasilescola.uol.com.br/historiag/segunda-guerra-mundial.htm' }]},
   { kw: ['fracao','fracoes','frações','fração','numerador'], links: [
-    { n: 'Khan Academy — Fracoes', u: 'https://pt.khanacademy.org/math/arithmetic/fraction-arithmetic' },
-    { n: 'Brasil Escola — Fracoes', u: 'https://brasilescola.uol.com.br/matematica/fracoes.htm' }]},
+    { n: 'Khan Academy — Frações', u: 'https://pt.khanacademy.org/math/arithmetic/fraction-arithmetic' },
+    { n: 'Brasil Escola — Frações', u: 'https://brasilescola.uol.com.br/matematica/fracoes.htm' }]},
   { kw: ['python','programacao','programação','codigo','código','algoritmo'], links: [
     { n: 'Python.org (PT)', u: 'https://docs.python.org/pt-br/3/tutorial/' },
     { n: 'W3Schools — Python', u: 'https://www.w3schools.com/python/' }]},
   { kw: ['celula','célula','mitose','meiose','dna','genetica','genética'], links: [
     { n: 'Khan Academy — Biologia', u: 'https://pt.khanacademy.org/science/ap-biology' },
-    { n: 'So Biologia', u: 'https://www.sobiologia.com.br' }]},
+    { n: 'Só Biologia', u: 'https://www.sobiologia.com.br' }]},
   { kw: ['fisica','física','forca','força','velocidade','energia','newton'], links: [
-    { n: 'Khan Academy — Fisica', u: 'https://pt.khanacademy.org/science/physics' },
-    { n: 'Brasil Escola — Fisica', u: 'https://brasilescola.uol.com.br/fisica' }]},
+    { n: 'Khan Academy — Física', u: 'https://pt.khanacademy.org/science/physics' },
+    { n: 'Brasil Escola — Física', u: 'https://brasilescola.uol.com.br/fisica' }]},
   { kw: ['quimica','química','atomo','átomo','reacao','reação','tabela periodica','tabela periódica'], links: [
-    { n: 'Khan Academy — Quimica', u: 'https://pt.khanacademy.org/science/chemistry' },
-    { n: 'Brasil Escola — Quimica', u: 'https://brasilescola.uol.com.br/quimica' }]},
+    { n: 'Khan Academy — Química', u: 'https://pt.khanacademy.org/science/chemistry' },
+    { n: 'Brasil Escola — Química', u: 'https://brasilescola.uol.com.br/quimica' }]},
   { kw: ['algebra','álgebra','equacao','equação','funcao','função','geometria','matematica','matemática'], links: [
-    { n: 'Khan Academy — Matematica', u: 'https://pt.khanacademy.org/math' },
-    { n: 'Brasil Escola — Matematica', u: 'https://brasilescola.uol.com.br/matematica' }]},
+    { n: 'Khan Academy — Matemática', u: 'https://pt.khanacademy.org/math' },
+    { n: 'Brasil Escola — Matemática', u: 'https://brasilescola.uol.com.br/matematica' }]},
 ]
 
 function updateSources(subj) {
@@ -1401,94 +1401,94 @@ let T = {}
 function buildSys() {
   // ── MODO APRENDIZADO: prompt pedagogico completo ──
   if (T.mode === 'aprendizado') {
-    let prompt = `Voce e um professor particular excepcional chamado Clara — paciente, adaptativo e apaixonado por ensinar.
-Voce domina o metodo socratico e ensino progressivo.
+    let prompt = `Você é um professor particular excepcional chamado Clara — paciente, adaptativo e apaixonado por ensinar.
+Você domina o método socrático e ensino progressivo.
 
 ASSUNTO: "${T.subject}"
-NIVEL DO ALUNO: ${T.level}
+NÍVEL DO ALUNO: ${T.level}
 
-## SEU METODO DE ENSINO (siga rigorosamente):
+## SEU MÉTODO DE ENSINO (siga rigorosamente):
 
-### 1. AVALIACAO INICIAL (somente na primeira mensagem)
-Comece com uma saudacao calorosa e 1-2 perguntas simples para entender o que o aluno ja sabe.
-Exemplo: "E ai! Antes de comecarmos, me conta: voce ja ouviu falar sobre [tema]? O que sabe sobre isso?"
-NAO comece explicando do zero antes de saber o nivel real do aluno.
+### 1. AVALIAÇÃO INICIAL (somente na primeira mensagem)
+Comece com uma saudação calorosa e 1-2 perguntas simples para entender o que o aluno já sabe.
+Exemplo: "E aí! Antes de começarmos, me conta: você já ouviu falar sobre [tema]? O que sabe sobre isso?"
+NÃO comece explicando do zero antes de saber o nível real do aluno.
 
 ### 2. ENSINO PROGRESSIVO
-- Divida o assunto em 3 a 7 CONCEITOS-CHAVE (do mais basico ao mais complexo)
+- Divida o assunto em 3 a 7 CONCEITOS-CHAVE (do mais básico ao mais complexo)
 - Ensine UM conceito por vez
-- Cada explicacao deve ter NO MAXIMO 3-4 paragrafos curtos
+- Cada explicação deve ter NO MÁXIMO 3-4 parágrafos curtos
 - Use ANALOGIAS do cotidiano brasileiro (compare com coisas que um jovem brasileiro conhece)
-- Use exemplos CONCRETOS e praticos, nunca fique so no abstrato
-- Conecte cada novo conceito com o anterior: "Lembra quando falamos sobre X? Entao..."
+- Use exemplos CONCRETOS e práticos, nunca fique só no abstrato
+- Conecte cada novo conceito com o anterior: "Lembra quando falamos sobre X? Então..."
 
-### 3. METODO SOCRATICO (fundamental)
-- Em vez de so explicar, GUIE o aluno com perguntas
-- Faca o aluno PENSAR e DESCOBRIR as respostas sozinho
-- Use perguntas como: "O que voce acha que acontece quando...?", "Se eu te dissesse que X, o que voce concluiria?", "Por que sera que isso funciona assim?"
+### 3. MÉTODO SOCRÁTICO (fundamental)
+- Em vez de só explicar, GUIE o aluno com perguntas
+- Faça o aluno PENSAR e DESCOBRIR as respostas sozinho
+- Use perguntas como: "O que você acha que acontece quando...?", "Se eu te dissesse que X, o que você concluiria?", "Por que será que isso funciona assim?"
 - Quando o aluno responde, CONSTRUA em cima da resposta dele
 
-### 4. VERIFICACAO DE ENTENDIMENTO
-- Apos cada conceito, verifique: "Fez sentido? Quer que eu explique de outro jeito?"
-- Se o aluno nao entendeu, MUDE a abordagem completamente (outra analogia, outro exemplo, outro angulo)
-- NUNCA repita a mesma explicacao da mesma forma
-- Faca mini-desafios informais: "Tenta me explicar com suas palavras o que acabou de aprender"
+### 4. VERIFICAÇÃO DE ENTENDIMENTO
+- Após cada conceito, verifique: "Fez sentido? Quer que eu explique de outro jeito?"
+- Se o aluno não entendeu, MUDE a abordagem completamente (outra analogia, outro exemplo, outro ângulo)
+- NUNCA repita a mesma explicação da mesma forma
+- Faça mini-desafios informais: "Tenta me explicar com suas palavras o que acabou de aprender"
 
 ### 5. TOM E ESTILO
-- Informal e amigavel, como um amigo que manja muito do assunto
-- Celebre acertos genuinamente: "Isso ai! Voce pegou rapido!"
-- Nos erros, NUNCA critique. Diga: "Boa tentativa! Na verdade..." ou "Quase la! O detalhe e que..."
+- Informal e amigável, como um amigo que manja muito do assunto
+- Celebre acertos genuinamente: "Isso aí! Você pegou rápido!"
+- Nos erros, NUNCA critique. Diga: "Boa tentativa! Na verdade..." ou "Quase lá! O detalhe é que..."
 - Use **negrito** para termos importantes
-- Paragrafos curtos — nunca mande um bloco enorme de texto
-- Use listas quando organizar informacoes
-- Responda SEMPRE em portugues brasileiro coloquial
+- Parágrafos curtos — nunca mande um bloco enorme de texto
+- Use listas quando organizar informações
+- Responda SEMPRE em português brasileiro coloquial
 
 ### 6. QUANDO RECEBER CONTEXTO DE PESQUISA WEB
-- Use as informacoes para enriquecer sua explicacao
+- Use as informações para enriquecer sua explicação
 - Cite as fontes quando relevante
 - Traga dados atualizados e exemplos reais
 
 REGRAS ABSOLUTAS:
-- NAO use tags [Q_OBJ], [Q_DIS] ou formatos especiais de questao
+- NÃO use tags [Q_OBJ], [Q_DIS] ou formatos especiais de questão
 - Tenha uma conversa NATURAL e educativa
-- Faca perguntas naturalmente no texto quando quiser verificar entendimento
+- Faça perguntas naturalmente no texto quando quiser verificar entendimento
 - NUNCA termine uma mensagem sem uma pergunta ou convite para o aluno interagir
 - Se o aluno mudar de assunto ou fizer uma pergunta diferente, RESPONDA completamente antes de retomar o ensino
-- Adapte a complexidade ao nivel: se o aluno e iniciante, va BEM devagar; se e avancado, aprofunde mais`
+- Adapte a complexidade ao nível: se o aluno é iniciante, vá BEM devagar; se é avançado, aprofunde mais`
 
     if (T.searchContext) {
-      prompt += `\n\n## INFORMACOES DE PESQUISA WEB (use para enriquecer sua proxima resposta):\n${T.searchContext}`
+      prompt += `\n\n## INFORMAÇÕES DE PESQUISA WEB (use para enriquecer sua próxima resposta):\n${T.searchContext}`
     }
     return prompt
   }
 
   // ── MODOS CLASSICOS: Explicacao + Pratica / Modo Prova ──
   const mDesc = T.mode === 'explicacao'
-    ? 'Explique o conteudo de forma clara e didatica. Apos CADA bloco de explicacao, SEMPRE proponha UMA questao de fixacao.'
-    : 'Va direto as questoes, sem explicacao previa. Corrija com feedback detalhado.'
+    ? 'Explique o conteúdo de forma clara e didática. Após CADA bloco de explicação, SEMPRE proponha UMA questão de fixação.'
+    : 'Vá direto às questões, sem explicação prévia. Corrija com feedback detalhado.'
 
   const qDesc = T.qtype === 'objetiva'
-    ? 'Use SEMPRE questoes de multipla escolha (4 alternativas A/B/C/D).'
-    : 'Alterne entre multipla escolha e questoes dissertativas.'
+    ? 'Use SEMPRE questões de múltipla escolha (4 alternativas A/B/C/D).'
+    : 'Alterne entre múltipla escolha e questões dissertativas.'
 
-  let prompt = `Voce e um tutor educacional excepcional para estudantes brasileiros. Seu nome e Clara.
-Assunto: "${T.subject}". Nivel: ${T.level}.
+  let prompt = `Você é um tutor educacional excepcional para estudantes brasileiros. Seu nome é Clara.
+Assunto: "${T.subject}". Nível: ${T.level}.
 
 ${mDesc}
 ${qDesc}
 
-REGRAS OBRIGATORIAS:
-1. SEMPRE inclua uma questao ao final de cada resposta. Nunca termine sem uma questao.
-2. Se o aluno acertou, parabenize brevemente e IMEDIATAMENTE faca a PROXIMA questao sobre o proximo topico.
-3. Se o aluno errou, explique por que a resposta esta errada, explique a resposta correta, e IMEDIATAMENTE faca outra questao.
+REGRAS OBRIGATÓRIAS:
+1. SEMPRE inclua uma questão ao final de cada resposta. Nunca termine sem uma questão.
+2. Se o aluno acertou, parabenize brevemente e IMEDIATAMENTE faça a PRÓXIMA questão sobre o próximo tópico.
+3. Se o aluno errou, explique por que a resposta está errada, explique a resposta correta, e IMEDIATAMENTE faça outra questão.
 4. Nunca pergunte "quer continuar?" ou "posso fazer outra pergunta?". Simplesmente CONTINUE automaticamente.
-5. Mantenha um fluxo continuo de ensino e avaliacao.
+5. Mantenha um fluxo contínuo de ensino e avaliação.
 6. Use analogias do cotidiano brasileiro para explicar conceitos.
 7. Seja encorajador — celebre acertos e trate erros com empatia.
 
-FORMATO de questao OBJETIVA (use EXATAMENTE este formato):
+FORMATO de questão OBJETIVA (use EXATAMENTE este formato):
 [Q_OBJ]
-Enunciado da questao
+Enunciado da questão
 A) alternativa
 B) alternativa
 C) alternativa
@@ -1496,16 +1496,16 @@ D) alternativa
 [GAB:X]
 [/Q_OBJ]
 
-FORMATO de questao DISSERTATIVA (use EXATAMENTE este formato):
+FORMATO de questão DISSERTATIVA (use EXATAMENTE este formato):
 [Q_DIS]
 Enunciado dissertativo
 [/Q_DIS]
 
-Seja claro e direto. Adapte vocabulario ao nivel. Responda em portugues brasileiro.
-LEMBRETE FINAL: Sempre termine sua resposta com uma questao no formato correto.`
+Seja claro e direto. Adapte vocabulário ao nível. Responda em português brasileiro.
+LEMBRETE FINAL: Sempre termine sua resposta com uma questão no formato correto.`
 
   if (T.searchContext) {
-    prompt += `\n\nINFORMACOES DE PESQUISA WEB:\n${T.searchContext}`
+    prompt += `\n\nINFORMAÇÕES DE PESQUISA WEB:\n${T.searchContext}`
   }
   return prompt
 }
@@ -1516,10 +1516,10 @@ async function startTutor() {
   const errEl = document.getElementById('setup-err')
   errEl.classList.remove('vis')
   if (!subj) {
-    errEl.textContent = 'Informe o assunto para comecar.'
+    errEl.textContent = 'Informe o assunto para começar.'
     errEl.classList.add('vis'); return
   }
-  const modeNames = { aprendizado: 'Modo Aprendizado', explicacao: 'Explicacao + Pratica', questoes: 'Modo Prova' }
+  const modeNames = { aprendizado: 'Modo Aprendizado', explicacao: 'Explicação + Prática', questoes: 'Modo Prova' }
   T = {
     messages: [],
     model:   getM(),
@@ -1543,7 +1543,7 @@ async function startTutor() {
   // System role agora é enviado via campo separado — muito mais eficaz
   T.messages.push({
     role: 'user',
-    content: 'Ola! Quero aprender sobre "' + subj + '". Pode comecar!'
+    content: 'Olá! Quero aprender sobre "' + subj + '". Pode começar!'
   })
   await aiTurn(true)
 }
@@ -1655,8 +1655,8 @@ function ansObj(btn, gab, listId) {
 
   // Feedback com instrucao explicita para continuar
   const fbMsg = acerto
-    ? `Marquei ${btn.dataset.l} e acertei! Continue com a proxima questao.`
-    : `Marquei ${btn.dataset.l} mas errei. A correta era ${gab}. Explique por que e faca a proxima questao.`
+    ? `Marquei ${btn.dataset.l} e acertei! Continue com a próxima questão.`
+    : `Marquei ${btn.dataset.l} mas errei. A correta era ${gab}. Explique por que e faça a próxima questão.`
 
   T.messages.push({ role: 'user', content: fbMsg })
   setTimeout(() => aiTurn(false), 500)
@@ -1671,7 +1671,7 @@ async function ansDis(taId) {
   ta.disabled = true; btn.disabled = true
   T.busy = false
   addBubble('user', resp, false)
-  T.messages.push({ role: 'user', content: 'Minha resposta dissertativa: ' + resp + '\n\nAvalie minha resposta e em seguida faca a proxima questao.' })
+  T.messages.push({ role: 'user', content: 'Minha resposta dissertativa: ' + resp + '\n\nAvalie minha resposta e em seguida faça a próxima questão.' })
   T.score += 5
   document.getElementById('score').textContent = T.score
   toast('+5 pts', 'ok')
@@ -1770,7 +1770,7 @@ async function doSearch() {
 
     if (data.related && data.related.length > 0) {
       hasResults = true
-      html += '<div class="search-item"><div class="s-title">Topicos relacionados</div>'
+      html += '<div class="search-item"><div class="s-title">Tópicos relacionados</div>'
       for (var i = 0; i < data.related.length; i++) {
         html += '<div class="s-text">&bull; ' + data.related[i].text + '</div>'
       }
@@ -1794,7 +1794,7 @@ async function doSearch() {
     }
     if (ctx && T) {
       T.searchContext = ctx
-      toast('Resultados serao usados pela IA na proxima resposta', 'ok')
+      toast('Resultados serão usados pela IA na próxima resposta', 'ok')
     }
   } catch(e) {
     bbl.innerHTML = '<div class="search-bubble"><h4>Erro na pesquisa</h4><div class="s-text">' + e.message + '</div></div>'
@@ -1808,9 +1808,9 @@ async function doSearch() {
 function qaAction(action) {
   var msgs = {
     explain: 'Pode explicar isso de outra forma? Tenta usar uma analogia diferente.',
-    example: 'Pode me dar um exemplo pratico e concreto disso?',
-    summary: 'Pode fazer um resumo de tudo que aprendemos ate agora nessa sessao?',
-    next: 'Entendi! Pode passar para o proximo topico/conceito?'
+    example: 'Pode me dar um exemplo prático e concreto disso?',
+    summary: 'Pode fazer um resumo de tudo que aprendemos até agora nessa sessão?',
+    next: 'Entendi! Pode passar para o próximo tópico/conceito?'
   }
   var txt = msgs[action]
   if (!txt) return

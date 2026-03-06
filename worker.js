@@ -56,12 +56,12 @@ async function getStats(kv) {
 }
 
 const REFINE_INSTRUCTION = `Reescreva completamente sua resposta anterior de forma melhorada:
-- Corrija imprecisoes factuais
-- Melhore clareza e didatica com analogias melhores
+- Corrija imprecisões factuais
+- Melhore clareza e didática com analogias melhores
 - Adicione exemplos concretos que faltaram
-- Mantenha o tom amigavel e educativo
-- Mantenha a mesma lingua
-- Escreva diretamente a resposta final — SEM mencionar revisao, melhoria ou reescrita`
+- Mantenha o tom amigável e educativo
+- Mantenha a mesma língua
+- Escreva diretamente a resposta final — SEM mencionar revisão, melhoria ou reescrita`
 
 // Strip any meta-text residue from refinement loops
 function cleanRefinedOutput(text) {

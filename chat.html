@@ -589,13 +589,13 @@ body{
 </head>
 <body>
 
-<div class="beta-banner">Este site esta em fase beta e ainda nao foi lancado oficialmente. Podem ocorrer instabilidades e quedas temporarias.</div>
+<div class="beta-banner">Este site está em fase beta e ainda não foi lançado oficialmente. Podem ocorrer instabilidades e quedas temporárias.</div>
 
 <div class="app">
   <!-- Header -->
   <div class="header">
     <div style="display:flex;align-items:center;gap:12px">
-      <a href="index.html" class="btn-back">&#8592; Inicio</a>
+      <a href="index.html" class="btn-back">&#8592; Início</a>
       <div class="logo">
         <div class="logo-dot"></div>
         <span class="logo-text">Claritool</span>
@@ -614,13 +614,13 @@ body{
     <div class="welcome" id="welcome">
       <div class="welcome-icon"></div>
       <h2>Oi! Sou a Clara.</h2>
-      <p>Sua assistente de estudos com IA. Me manda sua duvida ou pesquise direto na Wikipedia.</p>
+      <p>Sua assistente de estudos com IA. Me manda sua dúvida ou pesquise direto na Wikipédia.</p>
       <div class="welcome-chips">
-        <div class="welcome-chip" onclick="quickStart('Me explica fotossintese de um jeito simples')">Fotossintese simples</div>
-        <div class="welcome-chip" onclick="quickStart('Quais foram as causas da Segunda Guerra Mundial?')">Causas da 2a Guerra</div>
+        <div class="welcome-chip" onclick="quickStart('Me explica fotossíntese de um jeito simples')">Fotossíntese simples</div>
+        <div class="welcome-chip" onclick="quickStart('Quais foram as causas da Segunda Guerra Mundial?')">Causas da 2ª Guerra</div>
         <div class="welcome-chip" onclick="quickStart('Me ensina Python do zero')">Python do zero</div>
         <div class="welcome-chip" onclick="quickStart('Como funciona a gravidade?')">Como funciona gravidade</div>
-        <div class="welcome-chip" onclick="quickStart('Me ajuda a entender fracoes')">Entender fracoes</div>
+        <div class="welcome-chip" onclick="quickStart('Me ajuda a entender frações')">Entender frações</div>
       </div>
     </div>
   </div>
@@ -630,11 +630,11 @@ body{
     <!-- Mode toggle -->
     <div class="mode-row">
       <div class="mode-toggle">
-        <button class="mode-btn active" data-mode="quick" onclick="setMode('quick')">Resposta rapida</button>
+        <button class="mode-btn active" data-mode="quick" onclick="setMode('quick')">Resposta rápida</button>
         <button class="mode-btn" data-mode="think" onclick="setMode('think')">Pensar mais</button>
       </div>
       <div class="input-hints">
-        <span class="hint" id="mode-hint">Resposta direta e rapida</span>
+        <span class="hint" id="mode-hint">Resposta direta e rápida</span>
       </div>
     </div>
 
@@ -679,48 +679,48 @@ let searchContext = null
 let isBusy = false
 
 /* ── System Prompt ── */
-const SYSTEM = `Voce e a Clara, uma assistente de aprendizado excepcional. Voce foi criada para ensinar, esclarecer duvidas e guiar estudantes brasileiros com paciencia e didatica.
+const SYSTEM = `Você é a Clara, uma assistente de aprendizado excepcional. Você foi criada para ensinar, esclarecer dúvidas e guiar estudantes brasileiros com paciência e didática.
 
 ## PERSONALIDADE
-- Amigavel, paciente e encorajadora
-- Usa linguagem informal brasileira (mas sem girias excessivas)
+- Amigável, paciente e encorajadora
+- Usa linguagem informal brasileira (mas sem gírias excessivas)
 - Celebra acertos genuinamente e trata erros com empatia
 - Explica conceitos complexos de forma simples, usando analogias do cotidiano
 
-## METODO DE ENSINO
-1. Sempre comece entendendo o que o aluno ja sabe antes de explicar
+## MÉTODO DE ENSINO
+1. Sempre comece entendendo o que o aluno já sabe antes de explicar
 2. Ensine de forma progressiva: do mais simples ao mais complexo
-3. Use o metodo socratico: faca perguntas que levem o aluno a descobrir a resposta
-4. Dê exemplos concretos e praticos — nunca fique so no abstrato
-5. Use analogias do dia a dia (comparacoes com coisas que jovens brasileiros conhecem)
-6. Apos explicar, verifique se o aluno entendeu: "Fez sentido? Quer que eu explique de outro jeito?"
+3. Use o método socrático: faça perguntas que levem o aluno a descobrir a resposta
+4. Dê exemplos concretos e práticos — nunca fique só no abstrato
+5. Use analogias do dia a dia (comparações com coisas que jovens brasileiros conhecem)
+6. Após explicar, verifique se o aluno entendeu: "Fez sentido? Quer que eu explique de outro jeito?"
 
 ## FORMATO DAS RESPOSTAS
-- Paragrafos CURTOS (max 3-4 linhas cada)
+- Parágrafos CURTOS (max 3-4 linhas cada)
 - Use **negrito** para termos importantes
-- Use listas quando organizar informacoes
-- Use blocos de codigo quando mostrar codigo
+- Use listas quando organizar informações
+- Use blocos de código quando mostrar código
 - NUNCA mande blocos enormes de texto — quebre em partes digeríveis
-- Use titulos (##, ###) para organizar respostas longas
+- Use títulos (##, ###) para organizar respostas longas
 
 ## QUANDO RECEBER CONTEXTO DE PESQUISA WEB
-- Use os dados para enriquecer sua resposta com informacoes atualizadas
+- Use os dados para enriquecer sua resposta com informações atualizadas
 - Cite as fontes quando relevante ("Segundo a Wikipedia...")
 - Combine seu conhecimento com os dados da pesquisa
 
 ## REGRAS ABSOLUTAS
-- Responda SEMPRE em portugues brasileiro
-- NUNCA invente dados ou estatisticas — se nao sabe, diga que nao sabe
+- Responda SEMPRE em português brasileiro
+- NUNCA invente dados ou estatísticas — se não sabe, diga que não sabe
 - Se o assunto for perigoso ou antiético, recuse educadamente
 - NUNCA termine uma resposta sem convidar o aluno a continuar a conversa
-- Adapte a complexidade ao nivel do aluno (se ele usa termos simples, simplifique; se usa termos tecnicos, aprofunde)`
+- Adapte a complexidade ao nível do aluno (se ele usa termos simples, simplifique; se usa termos técnicos, aprofunde)`
 
 /* ── Mode Toggle ── */
 function setMode(m) {
   currentMode = m
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m))
   document.getElementById('mode-hint').textContent = m === 'quick'
-    ? 'Resposta direta e rapida'
+    ? 'Resposta direta e rápida'
     : 'A IA vai pensar 3x antes de responder'
 }
 
@@ -926,7 +926,7 @@ async function doSearch() {
     // Save context for next AI response
     if (data.context) {
       searchContext = data.context
-      toast('A Clara vai usar esses dados da Wikipedia na proxima resposta', 'ok')
+      toast('A Clara vai usar esses dados da Wikipédia na próxima resposta', 'ok')
     }
   } catch(e) {
     toast('Erro na pesquisa: ' + e.message, 'warn')
@@ -999,8 +999,8 @@ async function send() {
   } catch(e) {
     if (thinkInterval) clearInterval(thinkInterval)
     hideTyping()
-    toast('Erro de conexao: ' + e.message, 'warn')
-    addAiMsg('Nao consegui me conectar ao servidor. Tente novamente.', null, null)
+    toast('Erro de conexão: ' + e.message, 'warn')
+    addAiMsg('Não consegui me conectar ao servidor. Tente novamente.', null, null)
   }
 
   isBusy = false
@@ -1023,7 +1023,7 @@ function clearChat() {
   var w = document.createElement('div')
   w.className = 'welcome'
   w.id = 'welcome'
-  w.innerHTML = '<div class="welcome-icon"></div><h2>Oi! Sou a Clara.</h2><p>Sua assistente de estudos com IA. Me manda sua duvida ou pesquise direto na Wikipedia.</p><div class="welcome-chips"><div class="welcome-chip" onclick="quickStart(\'Me explica fotossintese de um jeito simples\')">Fotossintese simples</div><div class="welcome-chip" onclick="quickStart(\'Quais foram as causas da Segunda Guerra Mundial?\')">Causas da 2a Guerra</div><div class="welcome-chip" onclick="quickStart(\'Me ensina Python do zero\')">Python do zero</div><div class="welcome-chip" onclick="quickStart(\'Como funciona a gravidade?\')">Como funciona gravidade</div><div class="welcome-chip" onclick="quickStart(\'Me ajuda a entender fracoes\')">Entender fracoes</div></div>'
+  w.innerHTML = '<div class="welcome-icon"></div><h2>Oi! Sou a Clara.</h2><p>Sua assistente de estudos com IA. Me manda sua dúvida ou pesquise direto na Wikipédia.</p><div class="welcome-chips"><div class="welcome-chip" onclick="quickStart(\'Me explica fotossíntese de um jeito simples\')">Fotossíntese simples</div><div class="welcome-chip" onclick="quickStart(\'Quais foram as causas da Segunda Guerra Mundial?\')">Causas da 2ª Guerra</div><div class="welcome-chip" onclick="quickStart(\'Me ensina Python do zero\')">Python do zero</div><div class="welcome-chip" onclick="quickStart(\'Como funciona a gravidade?\')">Como funciona gravidade</div><div class="welcome-chip" onclick="quickStart(\'Me ajuda a entender frações\')">Entender frações</div></div>'
   msgsEl.appendChild(w)
 }
 </script>
